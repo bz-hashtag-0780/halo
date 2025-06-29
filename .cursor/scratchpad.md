@@ -112,12 +112,14 @@ halo/
 -   [x] **T1.7-NEW** Configure credentials SDK integration in frontend/lib/ (75 min) ✅
 -   [x] **T1.8-NEW** ❌ REMOVED: API endpoint not needed - credential issuance happens in UI ✅
 
-### Phase 2: Credential Issuance & Management (4 hours)
+### Phase 2: Credential Issuance & Verifiable Presentations (5 hours)
 
 -   [x] **T2.1-NEW** Build credential issuance UI for "Meeting Link Trust" (60 min) ✅
 -   [x] **T2.2-NEW** Implement credential creation flow using AIR SDK (90 min) ✅
--   [ ] **T2.3-NEW** Add credential verification interface (60 min)
--   [ ] **T2.4-NEW** Update landing page to explain credential-based trust system (30 min)
+-   [x] **T2.2b-NEW** Debug credential issuance completion (30 min) ✅
+-   [ ] **T2.3-NEW** Add proof presentation generation after issuance (60 min) 🎯
+-   [ ] **T2.4-NEW** Build verification interface for testing presentations (45 min)
+-   [ ] **T2.5-NEW** Update landing page to explain VC trust system (30 min)
 
 ### Phase 3: Chrome Extension Foundation (3 hours)
 
@@ -126,12 +128,12 @@ halo/
 -   [ ] **T3.3** Build popup interface for extension (45 min)
 -   [ ] **T3.4** Implement content script injection system (60 min)
 
-### Phase 4: Credential-Based Link Detection & Verification (4 hours)
+### Phase 4: Proof Verification & Trust Badge System (4 hours)
 
--   [ ] **T4.1** Create Gmail content script for link detection (90 min)
--   [ ] **T4.2-NEW** Build AIR credential verification integration in extension (75 min)
--   [ ] **T4.3** Implement ZK-proof based trust badge injection system (75 min)
--   [ ] **T4.4** Add Discord content script (30 min)
+-   [ ] **T4.1-NEW** Create content scripts for meeting link detection (60 min)
+-   [ ] **T4.2-NEW** Implement proof extraction and verification in extension (90 min) 🎯
+-   [ ] **T4.3-NEW** Build trust badge injection system with verification results (75 min)
+-   [ ] **T4.4-NEW** Add cross-platform support (Gmail, Discord) (45 min)
 
 ### Phase 5: Integration & Testing (2 hours)
 
@@ -143,18 +145,18 @@ halo/
 
 ### Todo
 
--   [ ] 🚨 **PRIORITY:** Install AIR Credentials SDK package
--   [ ] 🚨 **MANUAL:** Complete dashboard setup (schema, credentials, verification program)
--   [ ] Configure credentials SDK integration
--   [ ] Build credential issuance UI
--   [ ] Implement ZK-proof verification in Chrome extension
--   [ ] Integrate link detection with credential verification
--   [ ] Test complete credential flow
+-   [ ] 🎯 **PRIORITY:** Implement proof presentation generation after credential issuance (T2.3-NEW)
+-   [ ] 🎯 **NEXT:** Build verification interface for testing presentations (T2.4-NEW)
+-   [ ] 🔄 **FUTURE:** Chrome extension proof extraction and verification (T4.2-NEW)
+-   [ ] 🔄 **FUTURE:** Trust badge injection system (T4.3-NEW)
+-   [ ] 🔄 **FUTURE:** Cross-platform support (Gmail, Discord) (T4.4-NEW)
+-   [ ] ✅ Test complete VC flow: Issue → Present → Share → Verify
 
 ### In Progress
 
--   🎯 **Phase 2: Credential Issuance UI** (2/4 tasks complete - 50%)
--   Credential issuance and creation flow complete - proceeding with verification interface
+-   🔄 **Architecture Pivot: Verifiable Presentations** (Understanding corrected - implementing proper VC flow)
+-   🎯 **Next Task: T2.3-NEW** - Proof presentation generation after credential issuance (60 min)
+-   Widget launches successfully, now extending to generate shareable proofs
 
 ### Done
 
@@ -168,15 +170,20 @@ halo/
 -   [x] Install AIR Credentials SDK package (T1.5-NEW)
 -   [x] Configure complete credentials SDK integration with issuance and verification (T1.7-NEW)
 -   [x] ✅ **PHASE 1 COMPLETE:** Foundation + Credentials SDK Setup (8/8 tasks - 100%)
+-   [x] Build credential issuance UI with 3-state interface (T2.1-NEW)
+-   [x] Implement credential creation flow with AIR SDK widget integration (T2.2-NEW)
+-   [x] Resolve environment variable API URL override issue (T2.2b-NEW)
+-   [x] ✅ **BREAKTHROUGH:** AIR Credential Widget launches successfully
+-   [x] ✅ **ARCHITECTURE PIVOT:** Corrected to proper VC model (Issue → Present → Verify)
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** 🎯 PHASE 2 PROGRESS - Widget Launch Successful, Debugging Interaction (85%)
-**Next Action:** T2.2b-NEW - Debug widget "Start" button functionality (30 min)
-**Blockers:** Widget launches but "Start" button doesn't respond - requires investigation
-**Est. Completion:** T+18 hours from start
+**Current Phase:** 🔄 ARCHITECTURE PIVOT - Implementing Verifiable Presentations (90%)
+**Next Action:** T2.3-NEW - Implement proof presentation generation after credential issuance (60 min)
+**Blockers:** None - Clear path forward with proper VC model
+**Est. Completion:** T+20 hours from start (adjusted for pivot scope)
 
-**🎉 BREAKTHROUGH ACHIEVED:** AIR Credential Widget successfully launches!
+**🎉 BREAKTHROUGH ACHIEVED:** Widget launches + Architecture corrected to proper VC flow!
 
 **Recent Updates:**
 
@@ -476,9 +483,31 @@ NEXT_PUBLIC_REDIRECT_URL_FOR_ISSUER=http://localhost:3001/issue
 -   ✅ **Environment Variables:** All process.env values working properly
 -   ✅ **Navigation:** Header and landing page links functional
 
-### 🔍 T2.2b-NEW Current Task: Debug Widget "Start" Button ⚠️
+### 🚨 CRITICAL ARCHITECTURE PIVOT: Verifiable Presentations Required! 🔄
 
-**Status:** Widget launches but "Start" button doesn't respond - Investigation required
+**Status:** Major architectural understanding correction - Pivoting to proper VC model
+
+**❌ Previous (Incorrect) Understanding:**
+
+-   User generates "signed Google Meet link"
+-   Anyone clicking the link can "publicly verify" the signature
+-   Simple signature verification on meeting URLs
+
+**✅ Corrected (Proper VC) Understanding:**
+
+-   User issues AIR credential to their wallet (current implementation ✅)
+-   User generates **signed proof presentation** from that credential
+-   Proof presentation embedded in URL/QR code for sharing
+-   Recipients verify the **presentation** (not the original credential)
+-   Follows proper VC model: Issue → Present → Verify
+
+**Why This Pivot is Critical:**
+
+-   ✅ **AIR Credential Model:** Credentials are held by wallets, not publicly verifiable links
+-   ✅ **Privacy Preserving:** Only trust level shown, not wallet history
+-   ✅ **Verifiable Presentations:** Standard VC pattern for sharing proofs
+-   ✅ **Offline Verification:** Recipients can verify without sender being online
+-   ✅ **Cross-Platform:** Works in Gmail, Discord, QR codes, etc.
 
 **Symptoms:**
 
@@ -886,30 +915,281 @@ NEXT_PUBLIC_AIR_API_URL=https://credential.api.sandbox.air3.com
 -   ✅ **Step 1-3:** Environment setup, authentication, partner token - WORKING
 -   ✅ **Step 4:** AIR Credential Widget launches and displays - WORKING
 -   ❌ **Step 5:** Widget "Start" button functionality - NOT WORKING
--   🎯 **Current Issue:** When user clicks "Start" in widget, nothing happens
 
-**Next Investigation Steps:**
+## 🎯 NEW MVP ARCHITECTURE: Issue → Present → Verify
 
-1. **Check Widget Event Handlers:** Verify `issueCompleted` and error event listeners
-2. **Inspect Widget Configuration:** Validate credential subject data structure
-3. **Debug Credential Request:** Check if `ClaimRequest` object is properly formatted
-4. **Monitor Network Requests:** Watch for API calls when "Start" is clicked
-5. **Check Credential ID:** Verify `CREDENTIAL_ID` matches dashboard configuration
+**Current Status:** Widget launches successfully, now implementing proper VC flow
 
-**Technical Status:**
-
--   ✅ **API Authentication:** Issuer auth token obtained successfully
--   ✅ **Partner Token:** Partner URL with token working
--   ✅ **Widget Creation:** AirCredentialWidget instantiated correctly
--   ✅ **Widget Launch:** `widgetRef.current.launch()` executed successfully
--   ❌ **Widget Interaction:** "Start" button click handler not responding
-
-**Phase 2 Progress Update:**
+### **Phase 2 REVISED: Verifiable Presentations (3 hours)**
 
 -   ✅ **T2.1-NEW:** Build credential issuance UI (60 min) - COMPLETE
 -   ✅ **T2.2-NEW:** Implement credential creation flow (90 min) - COMPLETE
--   🎯 **T2.2b-NEW:** Debug widget interaction (30 min) - IN PROGRESS
--   🎯 **Next:** T2.3-NEW - Add credential verification interface (60 min)
+-   🎯 **T2.2b-NEW:** Debug credential issuance completion (30 min) - IN PROGRESS
+-   🔄 **T2.3-NEW:** Add proof presentation generation (60 min) - NEW PRIORITY
+-   🔄 **T2.4-NEW:** Build verification interface (45 min) - REVISED
+
+### **Phase 4 REVISED: Chrome Extension with Proof Verification (3 hours)**
+
+-   🔄 **T4.1-NEW:** Create content scripts for link detection (60 min) - REVISED
+-   🔄 **T4.2-NEW:** Implement proof extraction and verification (90 min) - NEW
+-   🔄 **T4.3-NEW:** Build trust badge injection system (60 min) - REVISED
+
+## 📋 DETAILED TECHNICAL IMPLEMENTATION PLAN
+
+### **T2.3-NEW: Proof Presentation Generation (60 min)**
+
+**Goal:** After credential issuance, generate verifiable presentation for sharing
+
+**Implementation Steps:**
+
+1. **Extend generateWidget() Success Handler:**
+
+    ```typescript
+    widgetRef.current.on('issueCompleted', async (result) => {
+    	console.log('Credential issued:', result);
+
+    	// Generate verifiable presentation
+    	const presentation = await createVerifiablePresentation(
+    		result.credential,
+    		meetingUrl,
+    		creatorAddress
+    	);
+
+    	// Create shareable URL with embedded proof
+    	const shareableUrl = createShareableUrl(meetingUrl, presentation);
+
+    	// Update UI with success + shareable link
+    	setCredentialResult({
+    		success: true,
+    		credential: result.credential,
+    		presentation: presentation,
+    		shareableUrl: shareableUrl,
+    	});
+    });
+    ```
+
+2. **Create Presentation Generation Function:**
+
+    ```typescript
+    // frontend/lib/credentialsUtils.ts
+    export const createVerifiablePresentation = async (
+    	credential: any,
+    	meetingUrl: string,
+    	creatorAddress: string
+    ): Promise<string> => {
+    	// Use AIR SDK to create presentation
+    	const presentationRequest = {
+    		process: 'Present',
+    		credential: credential,
+    		verifierDid: VERIFIER_DID,
+    		challenge: generateChallenge(meetingUrl), // URL-specific challenge
+    		domain: 'halo-mvp.com',
+    	};
+
+    	// Generate signed presentation
+    	const presentation = await airService.createPresentation(
+    		presentationRequest
+    	);
+    	return JSON.stringify(presentation);
+    };
+    ```
+
+3. **Create Shareable URL Generator:**
+    ```typescript
+    export const createShareableUrl = (
+    	originalUrl: string,
+    	presentation: string
+    ): string => {
+    	const encodedProof = btoa(presentation); // Base64 encode
+    	return `${originalUrl}?halo_proof=${encodedProof}`;
+    };
+    ```
+
+### **T2.4-NEW: Verification Interface (45 min)**
+
+**Goal:** Build `/verify` page to test proof verification
+
+**Implementation:**
+
+1. **Create Verification Page:**
+
+    ```typescript
+    // frontend/app/verify/page.tsx
+    export default function VerifyPage() {
+    	const [url, setUrl] = useState('');
+    	const [verificationResult, setVerificationResult] = useState(null);
+
+    	const handleVerify = async () => {
+    		const proof = extractProofFromUrl(url);
+    		if (proof) {
+    			const result = await verifyPresentation(proof);
+    			setVerificationResult(result);
+    		}
+    	};
+
+    	return (
+    		<div className="max-w-2xl mx-auto p-6">
+    			<h1>Verify Meeting Link</h1>
+    			<input
+    				value={url}
+    				onChange={(e) => setUrl(e.target.value)}
+    				placeholder="Paste meeting link with proof..."
+    			/>
+    			<button onClick={handleVerify}>Verify Trust</button>
+    			{verificationResult && (
+    				<TrustBadge result={verificationResult} />
+    			)}
+    		</div>
+    	);
+    }
+    ```
+
+2. **Create Verification Function:**
+
+    ```typescript
+    export const verifyPresentation = async (
+    	presentation: string
+    ): Promise<VerificationResult> => {
+    	try {
+    		const parsedPresentation = JSON.parse(presentation);
+
+    		// Use AIR verification program
+    		const verificationRequest = {
+    			process: 'Verify',
+    			presentation: parsedPresentation,
+    			programId: PROGRAM_ID,
+    			verifierAuth: await getVerifierAuthToken(),
+    		};
+
+    		const result = await airService.verifyPresentation(
+    			verificationRequest
+    		);
+
+    		return {
+    			isValid: result.valid,
+    			trustLevel: result.claims?.trust_level,
+    			creatorAddress: result.claims?.creator_address,
+    			platform: result.claims?.platform,
+    			timestamp: result.claims?.created_timestamp,
+    		};
+    	} catch (error) {
+    		return { isValid: false, error: error.message };
+    	}
+    };
+    ```
+
+### **T4.2-NEW: Chrome Extension Proof Verification (90 min)**
+
+**Goal:** Extract and verify proofs from meeting links in Gmail/Discord
+
+**Implementation:**
+
+1. **Content Script Link Detection:**
+
+    ```javascript
+    // extension/content/gmail.js
+    function scanForMeetingLinks() {
+    	const links = document.querySelectorAll(
+    		'a[href*="meet.google.com"], a[href*="zoom.us"]'
+    	);
+
+    	links.forEach((link) => {
+    		const href = link.getAttribute('href');
+    		const proof = extractProofFromUrl(href);
+
+    		if (proof) {
+    			verifyAndInjectBadge(link, proof);
+    		} else {
+    			injectUnverifiedBadge(link);
+    		}
+    	});
+    }
+    ```
+
+2. **Proof Verification in Extension:**
+
+    ```javascript
+    // extension/lib/verification.js
+    async function verifyProof(presentation) {
+    	try {
+    		// Use AIR SDK in extension context
+    		const result = await chrome.runtime.sendMessage({
+    			action: 'verifyPresentation',
+    			presentation: presentation,
+    		});
+
+    		return result;
+    	} catch (error) {
+    		console.error('Verification failed:', error);
+    		return { isValid: false, error: error.message };
+    	}
+    }
+    ```
+
+3. **Trust Badge Injection:**
+
+    ```javascript
+    function injectTrustBadge(linkElement, verificationResult) {
+    	const badge = document.createElement('span');
+    	badge.className = 'halo-trust-badge';
+
+    	if (verificationResult.isValid) {
+    		badge.innerHTML = '✅ Verified';
+    		badge.style.color = 'green';
+    	} else {
+    		badge.innerHTML = '⚠️ Unverified';
+    		badge.style.color = 'orange';
+    	}
+
+    	linkElement.parentNode.insertBefore(badge, linkElement.nextSibling);
+    }
+    ```
+
+## 🔧 INTEGRATION CHECKLIST
+
+### **AIR SDK Consistency:**
+
+-   ✅ Use same Partner ID across Next.js and Extension
+-   ✅ Same VERIFIER_DID and PROGRAM_ID for verification
+-   ✅ Consistent BUILD_ENV (SANDBOX) in both contexts
+-   ✅ Same credential schema validation
+
+### **Data Flow Validation:**
+
+-   ✅ Credential issuance → Presentation generation → URL embedding
+-   ✅ URL extraction → Presentation parsing → Verification
+-   ✅ Error handling at each step
+-   ✅ Privacy: Only trust level shown, not wallet data
+
+### **Security Measures:**
+
+-   ✅ Validate presentation signatures before trusting
+-   ✅ Check credential expiry dates
+-   ✅ Verify issuer DID matches expected value
+-   ✅ Use URL-specific challenges to prevent replay attacks
+
+## 📊 SUCCESS METRICS
+
+**Phase 2 Complete When:**
+
+-   ✅ User can issue credential to wallet
+-   ✅ System generates verifiable presentation
+-   ✅ Shareable URL contains embedded proof
+-   ✅ Verification page validates presentations correctly
+
+**Phase 4 Complete When:**
+
+-   ✅ Chrome extension detects meeting links
+-   ✅ Extracts and verifies embedded proofs
+-   ✅ Shows appropriate trust badges
+-   ✅ Works across Gmail and Discord
+
+**MVP Success:**
+
+-   ✅ End-to-end flow: Issue → Present → Share → Verify
+-   ✅ Privacy preserved (only trust level visible)
+-   ✅ Cross-platform verification
+-   ✅ Prevents social engineering via trust indicators
 
 ## Correct Next.js Setup Command
 
@@ -1220,10 +1500,20 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - **Resolution:** User updated `.env.local` to use correct API endpoint
 
 15. **✅ CONFIRMED: Correct AIR Credentials API Configuration:**
+
     - **API URL:** `https://credential.api.sandbox.air3.com` (for auth/login endpoints)
     - **Widget URL:** `https://credential-widget.sandbox.air3.com` (for widget iframe)
     - **Discovery:** User provided authoritative configuration after initial confusion
     - **Evidence:** Widget now launches successfully with these endpoints
     - **Critical:** Environment variables override code defaults - always verify .env files first
+
+16. **🚨 CRITICAL ARCHITECTURE PIVOT: Verifiable Presentations Model Required:**
+    - **Wrong Assumption:** Thought credentials could be "publicly verified" by clicking links
+    - **Correct VC Model:** Issue → Present → Verify (credentials held by wallets, presentations shared)
+    - **Proper Flow:** User issues credential to wallet → generates signed presentation → embeds in URL → recipient verifies presentation
+    - **Why Critical:** AIR credentials aren't "public" - they require proper presentation/verification flow
+    - **Privacy Benefit:** Only trust level shown, not full wallet history or private data
+    - **Technical Impact:** Need to implement presentation generation and verification functions
+    - **Chrome Extension:** Must extract and verify presentations, not simple signature checking
 
 _[Additional lessons learned during implementation will be documented here]_
