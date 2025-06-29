@@ -152,8 +152,8 @@ halo/
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning - Updated for frontend/ folder structure  
-**Next Action:** Configure AIR SDK dependencies in frontend/ folder  
+**Current Phase:** Planning - AIR SDK Dependencies Analysis  
+**Next Action:** Install missing AIR SDK dependencies in frontend/ folder  
 **Blockers:** Need to obtain Partner ID from MOCA Network for AIR SDK  
 **Est. Completion:** T+16 hours from start
 
@@ -162,8 +162,8 @@ halo/
 -   ✅ Next.js project successfully created in `frontend/` folder
 -   ✅ Project structure updated to reflect frontend/ organization
 -   ✅ Next.js 15 + TypeScript + Tailwind CSS v4 + ESLint configured
--   Updated all file paths to reference frontend/ directory
--   Ready for T1.2: Install AIR SDK dependencies in frontend folder
+-   ❌ Missing ALL AIR SDK dependencies in frontend/package.json
+-   Identified exact dependencies needed from airkit-example-main comparison
 
 ## Executor's Feedback or Assistance Requests
 
@@ -184,8 +184,17 @@ halo/
 **Command for T1.2:**
 
 ```bash
-cd frontend && npm install @mocanetwork/airkit-connector @tanstack/react-query wagmi viem tailwind-merge
+cd frontend && npm install @mocanetwork/airkit-connector @tanstack/react-query wagmi viem tailwind-merge jose
 ```
+
+**Missing Dependencies Analysis:**
+
+-   ❌ @mocanetwork/airkit-connector: ^1.4.2 (core AIR SDK)
+-   ❌ @tanstack/react-query: ^5.75.5 (data fetching)
+-   ❌ wagmi: ^2.15.6 (wallet connection)
+-   ❌ viem: ^2.29.0 (Ethereum interactions)
+-   ❌ tailwind-merge: ^3.2.0 (Tailwind utilities)
+-   ❌ jose: ^6.0.11 (JWT handling for credentials)
 
 **Ready for Executor Mode:** Yes, proceed with T1.2
 
@@ -207,26 +216,40 @@ cd frontend && npm install @mocanetwork/airkit-connector @tanstack/react-query w
 
 ## Starter Code Snippets
 
-### Basic Package.json Structure
+### Target Package.json Structure (frontend/package.json after T1.2)
 
 ```json
 {
-	"name": "halo-mvp",
+	"name": "frontend",
 	"version": "0.1.0",
+	"private": true,
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
-		"start": "next start"
+		"start": "next start",
+		"lint": "next lint"
 	},
 	"dependencies": {
-		"next": "^14.0.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"tailwindcss": "^3.3.0",
+		"next": "15.3.4",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
 		"@mocanetwork/airkit-connector": "^1.4.2",
 		"@tanstack/react-query": "^5.75.5",
 		"wagmi": "^2.15.6",
-		"viem": "^2.29.0"
+		"viem": "^2.29.0",
+		"tailwind-merge": "^3.2.0",
+		"jose": "^6.0.11"
+	},
+	"devDependencies": {
+		"typescript": "^5",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"@tailwindcss/postcss": "^4",
+		"tailwindcss": "^4",
+		"eslint": "^9",
+		"eslint-config-next": "15.3.4",
+		"@eslint/eslintrc": "^3"
 	}
 }
 ```
@@ -382,9 +405,18 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - Connection state managed through wagmi hooks
 
 5. **Project Structure Decision:**
+
     - Next.js project created in `frontend/` subfolder due to directory conflicts
     - All web app files are in `frontend/` directory
     - Chrome extension will be in separate `extension/` folder at root level
     - Executor must work in `frontend/` folder for all web app tasks
+
+6. **AIR SDK Dependencies Required:**
+    - @mocanetwork/airkit-connector: ^1.4.2 (core AIR SDK connector)
+    - @tanstack/react-query: ^5.75.5 (async state management)
+    - wagmi: ^2.15.6 (React hooks for Ethereum)
+    - viem: ^2.29.0 (low-level Ethereum library)
+    - tailwind-merge: ^3.2.0 (Tailwind utility merging)
+    - jose: ^6.0.11 (JWT operations for credentials)
 
 _[Additional lessons learned during implementation will be documented here]_
