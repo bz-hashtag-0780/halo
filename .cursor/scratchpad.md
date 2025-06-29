@@ -97,8 +97,8 @@ halo/
 
 -   [x] **T1.1** Setup Next.js project with Tailwind using create-next-app (15 min) ✅
 -   [x] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min) ✅
--   [ ] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min)
--   [ ] **T1.4** Create basic wallet connection page in frontend/app/ (45 min)
+-   [x] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min) ✅
+-   [x] **T1.4** Create basic wallet connection page in frontend/app/ (45 min) ✅
 -   [ ] **T1.5** Implement signature utilities in frontend/lib/ (60 min)
 -   [ ] **T1.6** Create link verification API endpoint in frontend/app/api/ (45 min)
 
@@ -133,8 +133,6 @@ halo/
 
 ### Todo
 
--   [ ] Setup wagmi providers (T1.3 - ready to execute)
--   [ ] Implement wallet connection
 -   [ ] Create link signing system
 -   [ ] Build Chrome extension
 -   [ ] Integrate link detection
@@ -142,19 +140,21 @@ halo/
 
 ### In Progress
 
--   Phase 1: Foundation setup (Partner ID obtained - all blockers resolved)
+-   Phase 1: Foundation setup (4/6 tasks complete)
 
 ### Done
 
 -   [x] Project planning and structure design
 -   [x] Next.js project setup with TypeScript + Tailwind CSS in frontend/ folder (T1.1)
 -   [x] Install AIR SDK dependencies in frontend/ folder (T1.2)
+-   [x] Setup wagmi providers and configuration in frontend/ folder (T1.3)
+-   [x] Create basic wallet connection page and components (T1.4)
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning - Ready for wagmi provider setup  
-**Next Action:** T1.3 - Setup wagmi providers and configuration  
-**Blockers:** ✅ RESOLVED - Partner ID obtained!  
+**Current Phase:** Execution - Foundation setup 67% complete  
+**Next Action:** T1.5 - Implement signature utilities for link signing  
+**Blockers:** None - ready for signature implementation  
 **Est. Completion:** T+16 hours from start
 
 **Recent Updates:**
@@ -164,40 +164,56 @@ halo/
 -   ✅ Next.js 15 + TypeScript + Tailwind CSS v4 + ESLint configured
 -   ✅ AIR SDK dependencies successfully installed (T1.2 complete)
 -   ✅ Partner ID obtained: efaadeae-e2bb-4327-8ffe-e43933c3922a
--   ✅ Moca Chain configuration provided - ready for full AIR SDK setup
+-   ✅ Wagmi providers and AIR SDK configuration complete (T1.3 complete)
+-   ✅ Fixed AuthMessageService singleton issue
+-   ✅ Wallet connection page and components implemented (T1.4 complete)
 
 ## Executor's Feedback or Assistance Requests
 
-### T1.2 Completed Successfully! ✅
+### T1.3 Completed Successfully! ✅
 
-**Status:** AIR SDK dependencies successfully installed in `frontend/` folder
+**Status:** Wagmi providers and AIR SDK configuration successfully implemented
 
-**Confirmed Installations:**
+**Files Created:**
 
--   ✅ @mocanetwork/airkit-connector: ^1.4.2 (core AIR SDK)
--   ✅ @tanstack/react-query: ^5.81.5 (data fetching - newer version)
--   ✅ wagmi: ^2.15.6 (wallet connection)
--   ✅ viem: ^2.31.4 (Ethereum interactions - newer version)
--   ✅ tailwind-merge: ^3.3.1 (Tailwind utilities - newer version)
--   ✅ jose: ^6.0.11 (JWT handling for credentials)
+-   ✅ `frontend/lib/wagmiConfig.ts` - Wagmi config with singleton pattern
+-   ✅ `frontend/components/providers/WagmiProvider.tsx` - Provider wrapper
+-   ✅ Updated `frontend/app/layout.tsx` - Integrated providers and updated metadata
 
-**Next Task for Executor:** T1.3 - Setup wagmi providers and configuration
+**Critical Issue Resolved:**
 
-**Files to Create for T1.3:**
+-   ❌ **Error:** "AuthMessageService already created"
+-   ✅ **Solution:** Implemented singleton pattern in wagmiConfig to prevent multiple AIR SDK instances
+-   ✅ **Testing:** Next.js dev server running successfully on port 3001
 
-1. `frontend/lib/wagmiConfig.ts` - Wagmi configuration with AIR connector ✅ (Ready)
-2. `frontend/components/providers/WagmiProvider.tsx` - Provider wrapper
-3. Update `frontend/app/layout.tsx` - Add providers to root layout
+### T1.4 Completed Successfully! ✅
 
-**Complete Code Snippets Ready:**
+**Status:** Wallet connection page and components successfully implemented
 
--   ✅ Partner ID: efaadeae-e2bb-4327-8ffe-e43933c3922a
--   ✅ Moca Chain configuration provided
--   ✅ Full wagmiConfig.ts code ready
--   ✅ Provider wrapper pattern ready
--   ✅ Layout integration ready
+**Files Created:**
 
-**Ready for Executor Mode:** Yes, proceed with T1.3 - all blockers resolved!
+-   ✅ `frontend/lib/airSdk.ts` - AIR SDK utility hooks (useWalletConnection, useAirkit)
+-   ✅ `frontend/components/WalletConnect.tsx` - Complete wallet connection component
+-   ✅ `frontend/app/connect/page.tsx` - Dedicated wallet connection page
+-   ✅ Updated `frontend/app/page.tsx` - Beautiful landing page with navigation
+
+**Features Implemented:**
+
+-   ✅ Connect/disconnect wallet functionality
+-   ✅ Connection status display with address and network
+-   ✅ Loading states and error handling
+-   ✅ Responsive UI with Tailwind CSS
+-   ✅ Navigation between landing page and connect page
+
+**Next Task for Executor:** T1.5 - Implement signature utilities for link signing
+
+**Files to Create for T1.5:**
+
+1. `frontend/lib/signature.ts` - Link signing and verification utilities
+2. Update `frontend/lib/airSdk.ts` - Add credential management hooks
+3. Create signature scheme for meeting links
+
+**Ready for Executor Mode:** Yes, proceed with T1.5
 
 ### Complete T1.3 Code Snippets
 
@@ -489,10 +505,17 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - All required packages now available for wagmi provider setup
 
 8. **Critical AIR SDK Configuration:**
+
     - Partner ID: efaadeae-e2bb-4327-8ffe-e43933c3922a
     - Moca Chain ID: 5151
     - RPC URL: https://devnet-rpc-eu.mocachain.org
     - Build Environment: SANDBOX for development
     - All configuration values now available for implementation
+
+9. **AuthMessageService Singleton Issue:**
+    - **Problem:** "AuthMessageService already created" error in development
+    - **Cause:** React development mode re-mounting components creates multiple AIR SDK instances
+    - **Solution:** Implemented singleton pattern in wagmiConfig.ts with `let wagmiConfig: Config | null = null`
+    - **Result:** Prevents multiple initialization, stable development environment
 
 _[Additional lessons learned during implementation will be documented here]_
