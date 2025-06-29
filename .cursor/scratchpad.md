@@ -133,7 +133,7 @@ halo/
 
 ### Todo
 
--   [ ] Setup wagmi providers
+-   [ ] Setup wagmi providers (T1.3 - ready to execute)
 -   [ ] Implement wallet connection
 -   [ ] Create link signing system
 -   [ ] Build Chrome extension
@@ -142,7 +142,7 @@ halo/
 
 ### In Progress
 
--   Phase 1: Foundation setup
+-   Phase 1: Foundation setup (Partner ID obtained - all blockers resolved)
 
 ### Done
 
@@ -154,7 +154,7 @@ halo/
 
 **Current Phase:** Planning - Ready for wagmi provider setup  
 **Next Action:** T1.3 - Setup wagmi providers and configuration  
-**Blockers:** Need to obtain Partner ID from MOCA Network for AIR SDK  
+**Blockers:** ✅ RESOLVED - Partner ID obtained!  
 **Est. Completion:** T+16 hours from start
 
 **Recent Updates:**
@@ -163,7 +163,8 @@ halo/
 -   ✅ Project structure updated to reflect frontend/ organization
 -   ✅ Next.js 15 + TypeScript + Tailwind CSS v4 + ESLint configured
 -   ✅ AIR SDK dependencies successfully installed (T1.2 complete)
--   Ready for wagmi provider configuration with correct dependencies
+-   ✅ Partner ID obtained: efaadeae-e2bb-4327-8ffe-e43933c3922a
+-   ✅ Moca Chain configuration provided - ready for full AIR SDK setup
 
 ## Executor's Feedback or Assistance Requests
 
@@ -184,13 +185,56 @@ halo/
 
 **Files to Create for T1.3:**
 
-1. `frontend/lib/wagmiConfig.ts` - Wagmi configuration with AIR connector
+1. `frontend/lib/wagmiConfig.ts` - Wagmi configuration with AIR connector ✅ (Ready)
 2. `frontend/components/providers/WagmiProvider.tsx` - Provider wrapper
 3. Update `frontend/app/layout.tsx` - Add providers to root layout
 
-**Critical Note:** Still need Partner ID for AIR SDK initialization
+**Complete Code Snippets Ready:**
 
-**Ready for Executor Mode:** Yes, proceed with T1.3
+-   ✅ Partner ID: efaadeae-e2bb-4327-8ffe-e43933c3922a
+-   ✅ Moca Chain configuration provided
+-   ✅ Full wagmiConfig.ts code ready
+-   ✅ Provider wrapper pattern ready
+-   ✅ Layout integration ready
+
+**Ready for Executor Mode:** Yes, proceed with T1.3 - all blockers resolved!
+
+### Complete T1.3 Code Snippets
+
+**1. WagmiProvider.tsx:**
+
+```typescript
+// frontend/components/providers/WagmiProvider.tsx
+'use client';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { getWagmiConfig } from '../../lib/wagmiConfig';
+import { ReactNode, useMemo } from 'react';
+
+const queryClient = new QueryClient();
+
+export function Providers({ children }: { children: ReactNode }) {
+	const config = useMemo(() => getWagmiConfig(), []);
+
+	return (
+		<WagmiProvider config={config}>
+			<QueryClientProvider client={queryClient}>
+				{children}
+			</QueryClientProvider>
+		</WagmiProvider>
+	);
+}
+```
+
+**2. Layout.tsx Update:**
+
+```typescript
+// Add import to frontend/app/layout.tsx
+import { Providers } from '../components/providers/WagmiProvider';
+
+// Wrap children with Providers in the return statement
+```
 
 ## Correct Next.js Setup Command
 
@@ -291,27 +335,51 @@ export const useWalletConnection = () => {
 
 ### AIR SDK Configuration
 
-```javascript
-// lib/wagmiConfig.js
+```typescript
+// frontend/lib/wagmiConfig.ts
 import { airConnector } from '@mocanetwork/airkit-connector';
 import { createConfig, http } from 'wagmi';
 import { BUILD_ENV } from '@mocanetwork/airkit';
+import { type Chain } from 'viem';
 
-export const getWagmiConfig = (partnerId) => {
+// Moca Chain Testnet Configuration
+export const mocaChain: Chain = {
+	id: 5151,
+	name: 'Moca',
+	nativeCurrency: {
+		name: 'Moca',
+		symbol: 'MOCA',
+		decimals: 18,
+	},
+	rpcUrls: {
+		default: {
+			http: ['https://devnet-rpc-eu.mocachain.org'],
+		},
+	},
+	blockExplorers: {
+		default: {
+			name: 'Moca Devenet Explorer',
+			url: 'https://devnet-scan.mocachain.org',
+		},
+	},
+};
+
+// Partner ID for Halo MVP
+export const PARTNER_ID = 'efaadeae-e2bb-4327-8ffe-e43933c3922a';
+
+export const getWagmiConfig = () => {
 	const connectors = [
 		airConnector({
-			buildEnv: BUILD_ENV.SANDBOX, // or BUILD_ENV.PRODUCTION
+			buildEnv: BUILD_ENV.SANDBOX,
 			enableLogging: true,
-			partnerId,
+			partnerId: PARTNER_ID,
 		}),
 	];
 
 	return createConfig({
-		chains: [
-			/* your supported chains */
-		],
+		chains: [mocaChain],
 		transports: {
-			// your chain transports
+			[mocaChain.id]: http(),
 		},
 		connectors,
 	});
@@ -415,8 +483,16 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - jose: ^6.0.11 (JWT operations for credentials)
 
 7. **T1.2 Completion:**
+
     - Dependencies successfully installed by user manually
     - Newer versions installed: react-query ^5.81.5, viem ^2.31.4, tailwind-merge ^3.3.1
     - All required packages now available for wagmi provider setup
+
+8. **Critical AIR SDK Configuration:**
+    - Partner ID: efaadeae-e2bb-4327-8ffe-e43933c3922a
+    - Moca Chain ID: 5151
+    - RPC URL: https://devnet-rpc-eu.mocachain.org
+    - Build Environment: SANDBOX for development
+    - All configuration values now available for implementation
 
 _[Additional lessons learned during implementation will be documented here]_
