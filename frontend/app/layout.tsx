@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import '@mocanetwork/air-credential-sdk/dist/style.css';
 import { Providers } from '../components/providers/WagmiProvider';
 import { Header } from '../components/layout/Header';
 
