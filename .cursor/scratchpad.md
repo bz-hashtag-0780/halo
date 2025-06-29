@@ -96,7 +96,7 @@ halo/
 ### Phase 1: Foundation (4 hours)
 
 -   [x] **T1.1** Setup Next.js project with Tailwind using create-next-app (15 min) ✅
--   [ ] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min)
+-   [x] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min) ✅
 -   [ ] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min)
 -   [ ] **T1.4** Create basic wallet connection page in frontend/app/ (45 min)
 -   [ ] **T1.5** Implement signature utilities in frontend/lib/ (60 min)
@@ -133,7 +133,6 @@ halo/
 
 ### Todo
 
--   [ ] Install AIR SDK dependencies
 -   [ ] Setup wagmi providers
 -   [ ] Implement wallet connection
 -   [ ] Create link signing system
@@ -149,11 +148,12 @@ halo/
 
 -   [x] Project planning and structure design
 -   [x] Next.js project setup with TypeScript + Tailwind CSS in frontend/ folder (T1.1)
+-   [x] Install AIR SDK dependencies in frontend/ folder (T1.2)
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning - AIR SDK Dependencies Analysis  
-**Next Action:** Install missing AIR SDK dependencies in frontend/ folder  
+**Current Phase:** Planning - Ready for wagmi provider setup  
+**Next Action:** T1.3 - Setup wagmi providers and configuration  
 **Blockers:** Need to obtain Partner ID from MOCA Network for AIR SDK  
 **Est. Completion:** T+16 hours from start
 
@@ -162,41 +162,35 @@ halo/
 -   ✅ Next.js project successfully created in `frontend/` folder
 -   ✅ Project structure updated to reflect frontend/ organization
 -   ✅ Next.js 15 + TypeScript + Tailwind CSS v4 + ESLint configured
--   ❌ Missing ALL AIR SDK dependencies in frontend/package.json
--   Identified exact dependencies needed from airkit-example-main comparison
+-   ✅ AIR SDK dependencies successfully installed (T1.2 complete)
+-   Ready for wagmi provider configuration with correct dependencies
 
 ## Executor's Feedback or Assistance Requests
 
-### T1.1 Completed Successfully! ✅
+### T1.2 Completed Successfully! ✅
 
-**Status:** Next.js project created in `frontend/` folder
+**Status:** AIR SDK dependencies successfully installed in `frontend/` folder
 
--   ✅ Next.js 15.3.4 with App Router
--   ✅ TypeScript 5 configured
--   ✅ Tailwind CSS v4 setup
--   ✅ ESLint configuration
--   ✅ React 19
+**Confirmed Installations:**
 
-**Next Task for Executor:** T1.2 - Install AIR SDK dependencies
+-   ✅ @mocanetwork/airkit-connector: ^1.4.2 (core AIR SDK)
+-   ✅ @tanstack/react-query: ^5.81.5 (data fetching - newer version)
+-   ✅ wagmi: ^2.15.6 (wallet connection)
+-   ✅ viem: ^2.31.4 (Ethereum interactions - newer version)
+-   ✅ tailwind-merge: ^3.3.1 (Tailwind utilities - newer version)
+-   ✅ jose: ^6.0.11 (JWT handling for credentials)
 
-**Working Directory:** All future frontend tasks should work in `frontend/` folder
+**Next Task for Executor:** T1.3 - Setup wagmi providers and configuration
 
-**Command for T1.2:**
+**Files to Create for T1.3:**
 
-```bash
-cd frontend && npm install @mocanetwork/airkit-connector @tanstack/react-query wagmi viem tailwind-merge jose
-```
+1. `frontend/lib/wagmiConfig.ts` - Wagmi configuration with AIR connector
+2. `frontend/components/providers/WagmiProvider.tsx` - Provider wrapper
+3. Update `frontend/app/layout.tsx` - Add providers to root layout
 
-**Missing Dependencies Analysis:**
+**Critical Note:** Still need Partner ID for AIR SDK initialization
 
--   ❌ @mocanetwork/airkit-connector: ^1.4.2 (core AIR SDK)
--   ❌ @tanstack/react-query: ^5.75.5 (data fetching)
--   ❌ wagmi: ^2.15.6 (wallet connection)
--   ❌ viem: ^2.29.0 (Ethereum interactions)
--   ❌ tailwind-merge: ^3.2.0 (Tailwind utilities)
--   ❌ jose: ^6.0.11 (JWT handling for credentials)
-
-**Ready for Executor Mode:** Yes, proceed with T1.2
+**Ready for Executor Mode:** Yes, proceed with T1.3
 
 ## Correct Next.js Setup Command
 
@@ -412,11 +406,17 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - Executor must work in `frontend/` folder for all web app tasks
 
 6. **AIR SDK Dependencies Required:**
+
     - @mocanetwork/airkit-connector: ^1.4.2 (core AIR SDK connector)
     - @tanstack/react-query: ^5.75.5 (async state management)
     - wagmi: ^2.15.6 (React hooks for Ethereum)
     - viem: ^2.29.0 (low-level Ethereum library)
     - tailwind-merge: ^3.2.0 (Tailwind utility merging)
     - jose: ^6.0.11 (JWT operations for credentials)
+
+7. **T1.2 Completion:**
+    - Dependencies successfully installed by user manually
+    - Newer versions installed: react-query ^5.81.5, viem ^2.31.4, tailwind-merge ^3.3.1
+    - All required packages now available for wagmi provider setup
 
 _[Additional lessons learned during implementation will be documented here]_
