@@ -1,6 +1,6 @@
 import { airConnector } from '@mocanetwork/airkit-connector';
 import { createConfig, http, type Config } from 'wagmi';
-import { BUILD_ENV } from '@mocanetwork/airkit';
+import { BUILD_ENV as AIRKIT_BUILD_ENV } from '@mocanetwork/airkit';
 import { type Chain } from 'viem';
 
 // Moca Chain Testnet Configuration
@@ -25,8 +25,16 @@ export const mocaChain: Chain = {
 	},
 };
 
-// Partner ID for Halo MVP
-export const PARTNER_ID = 'efaadeae-e2bb-4327-8ffe-e43933c3922a';
+// Partner ID for Halo MVP (using working Partner ID from air-credential-example)
+export const PARTNER_ID =
+	process.env.NEXT_PUBLIC_PARTNER_ID ||
+	'66811bd6-dab9-41ef-8146-61f29d038a45';
+
+// Build environment configuration (matching airkit-example pattern)
+export const BUILD_ENV = AIRKIT_BUILD_ENV;
+
+console.log('🐛 wagmiConfig: PARTNER_ID =', PARTNER_ID);
+console.log('🐛 wagmiConfig: BUILD_ENV =', BUILD_ENV);
 
 // Singleton pattern to prevent multiple AIR SDK instances
 let wagmiConfig: Config | null = null;

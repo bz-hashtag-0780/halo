@@ -30,6 +30,43 @@ export default function GeneratePage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		// 🐛 DEBUG: Log all environment variables and configuration
+		console.log('🐛 DEBUGGING Generate Verified Link Click:');
+		console.log('Environment Variables:', {
+			NEXT_PUBLIC_AIR_API_URL: process.env.NEXT_PUBLIC_AIR_API_URL,
+			NEXT_PUBLIC_ISSUER_DID: process.env.NEXT_PUBLIC_ISSUER_DID
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_ISSUER_API_KEY: process.env.NEXT_PUBLIC_ISSUER_API_KEY
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_VERIFIER_DID: process.env.NEXT_PUBLIC_VERIFIER_DID
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_VERIFIER_API_KEY: process.env
+				.NEXT_PUBLIC_VERIFIER_API_KEY
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_CREDENTIAL_ID: process.env.NEXT_PUBLIC_CREDENTIAL_ID
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_PROGRAM_ID: process.env.NEXT_PUBLIC_PROGRAM_ID
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_PARTNER_ID: process.env.NEXT_PUBLIC_PARTNER_ID
+				? '✓ Set'
+				: '✗ Missing',
+			NEXT_PUBLIC_AIR_BUILD_ENV: process.env.NEXT_PUBLIC_AIR_BUILD_ENV,
+		});
+
+		console.log(
+			'Credentials Configuration Check:',
+			isCredentialsConfigured()
+		);
+		console.log('Wallet State:', { isConnected, address });
+		console.log('Meeting URL:', meetingUrl);
+		console.log('Platform Detection:', detectPlatform(meetingUrl));
+
 		if (!isConnected || !address) {
 			setError('Please connect your wallet first');
 			return;
@@ -56,6 +93,8 @@ export default function GeneratePage() {
 		setIsLoading(true);
 		setError('');
 		setSuccess(false);
+
+		console.log('🚀 Starting credential issuance...');
 
 		await issueCredential(
 			meetingUrl,
