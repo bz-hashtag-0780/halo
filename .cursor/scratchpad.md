@@ -61,7 +61,10 @@ halo/
 │   │   ├── layout.tsx       # Root layout
 │   │   └── globals.css      # Global styles
 │   ├── components/          # React components
-│   │   ├── WalletConnect.tsx    # Wallet connection component
+│   │   ├── layout/              # Layout components
+│   │   │   ├── Header.tsx       # Navigation header with wallet
+│   │   │   └── WalletButton.tsx # Compact wallet connect button
+│   │   ├── WalletConnect.tsx    # Full wallet connection component (legacy)
 │   │   ├── LinkGenerator.tsx    # Signed link creation
 │   │   ├── TrustBadge.tsx       # Trust badge component
 │   │   └── providers/           # Context providers
@@ -99,6 +102,7 @@ halo/
 -   [x] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min) ✅
 -   [x] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min) ✅
 -   [x] **T1.4** Create basic wallet connection page in frontend/app/ (45 min) ✅
+-   [ ] **T1.4b** Refactor to navigation header with global wallet state (30 min)
 -   [ ] **T1.5** Implement signature utilities in frontend/lib/ (60 min)
 -   [ ] **T1.6** Create link verification API endpoint in frontend/app/api/ (45 min)
 
@@ -133,6 +137,7 @@ halo/
 
 ### Todo
 
+-   [ ] Refactor wallet UX to header navigation (T1.4b)
 -   [ ] Create link signing system
 -   [ ] Build Chrome extension
 -   [ ] Integrate link detection
@@ -140,7 +145,7 @@ halo/
 
 ### In Progress
 
--   Phase 1: Foundation setup (4/6 tasks complete)
+-   Phase 1: Foundation setup (4/7 tasks, UX refactor needed)
 
 ### Done
 
@@ -152,9 +157,9 @@ halo/
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Execution - Foundation setup 67% complete  
-**Next Action:** T1.5 - Implement signature utilities for link signing  
-**Blockers:** None - ready for signature implementation  
+**Current Phase:** Planning - UX Improvement for wallet connection  
+**Next Action:** T1.4b - Implement proper navigation header with global wallet state  
+**Blockers:** None - ready for UX refactor  
 **Est. Completion:** T+16 hours from start
 
 **Recent Updates:**
@@ -167,6 +172,7 @@ halo/
 -   ✅ Wagmi providers and AIR SDK configuration complete (T1.3 complete)
 -   ✅ Fixed AuthMessageService singleton issue
 -   ✅ Wallet connection page and components implemented (T1.4 complete)
+-   🔄 **UX Issue Identified:** Wallet connection should be in header, not separate page
 
 ## Executor's Feedback or Assistance Requests
 
@@ -205,15 +211,93 @@ halo/
 -   ✅ Responsive UI with Tailwind CSS
 -   ✅ Navigation between landing page and connect page
 
-**Next Task for Executor:** T1.5 - Implement signature utilities for link signing
+### UX Issue Identified - Wallet Connection Needs Refactor! 🔄
 
-**Files to Create for T1.5:**
+**Problem:** Current wallet connection UX is non-standard:
 
-1. `frontend/lib/signature.ts` - Link signing and verification utilities
-2. Update `frontend/lib/airSdk.ts` - Add credential management hooks
-3. Create signature scheme for meeting links
+-   ❌ Separate `/connect` page is awkward
+-   ❌ Users have to navigate away from main flow
+-   ❌ No persistent wallet state visible across app
+-   ❌ Not following web3 UX best practices
 
-**Ready for Executor Mode:** Yes, proceed with T1.5
+**Solution:** Standard web3 navigation pattern:
+
+-   ✅ Header/navbar with compact wallet button
+-   ✅ Global wallet state visible everywhere
+-   ✅ Connect/disconnect without leaving page
+-   ✅ Abbreviated address display when connected
+
+**Next Task for Executor:** T1.4b - Refactor to navigation header with global wallet state
+
+**Files to Create/Modify for T1.4b:**
+
+1. **Create** `frontend/components/layout/Header.tsx` - Navigation header
+2. **Create** `frontend/components/layout/WalletButton.tsx` - Compact wallet button
+3. **Modify** `frontend/app/layout.tsx` - Add header to all pages
+4. **Modify** `frontend/app/page.tsx` - Remove separate "Connect Wallet" button
+5. **Optional** Keep `frontend/app/connect/page.tsx` for detailed wallet info
+
+**Design Requirements:**
+
+-   Header with logo, navigation links, and wallet button
+-   Wallet button shows "Connect Wallet" when disconnected
+-   When connected: shows abbreviated address (0x1234...5678) + disconnect option
+-   Responsive design for mobile/desktop
+-   Clean, professional styling matching current design
+
+**After T1.4b:** Proceed with T1.5 - Implement signature utilities
+
+**Ready for Executor Mode:** Yes, proceed with T1.4b refactor
+
+### T1.4b Code Structure Plan
+
+**1. Header Component Structure:**
+
+```typescript
+// frontend/components/layout/Header.tsx
+- Logo/brand on left
+- Navigation links in center (Home, Generate)
+- Wallet button on right
+- Responsive mobile hamburger menu
+```
+
+**2. Wallet Button States:**
+
+```typescript
+// frontend/components/layout/WalletButton.tsx
+// State 1: Disconnected
+<button>Connect Wallet</button>
+
+// State 2: Connecting
+<button disabled>Connecting...</button>
+
+// State 3: Connected
+<div>
+  <span>0x1234...5678</span>
+  <button>Disconnect</button>
+</div>
+```
+
+**3. Address Formatting Utility:**
+
+```typescript
+// Add to frontend/lib/airSdk.ts
+export const formatAddress = (address: string) => {
+	return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+```
+
+**4. Layout Integration:**
+
+```typescript
+// frontend/app/layout.tsx
+<body>
+	<Providers>
+		<Header />
+		{children}
+	</Providers>
+</body>
+```
 
 ### Complete T1.3 Code Snippets
 
@@ -513,9 +597,16 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - All configuration values now available for implementation
 
 9. **AuthMessageService Singleton Issue:**
+
     - **Problem:** "AuthMessageService already created" error in development
     - **Cause:** React development mode re-mounting components creates multiple AIR SDK instances
     - **Solution:** Implemented singleton pattern in wagmiConfig.ts with `let wagmiConfig: Config | null = null`
     - **Result:** Prevents multiple initialization, stable development environment
+
+10. **Wallet Connection UX Anti-Pattern:**
+    - **Problem:** Created separate `/connect` page for wallet connection - not standard web3 UX
+    - **Standard Pattern:** Header/navbar with wallet button, global state, no page navigation required
+    - **Solution Plan:** Refactor to navigation header with compact wallet button
+    - **Best Practice:** Keep wallet connection contextual and always accessible
 
 _[Additional lessons learned during implementation will be documented here]_
