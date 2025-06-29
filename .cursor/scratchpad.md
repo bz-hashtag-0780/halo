@@ -17,29 +17,33 @@
 
 **Tech Stack:**
 
+-   @mocanetwork/air-credential-sdk (MANDATORY - Full verifiable credentials system)
 -   @mocanetwork/airkit-connector (AIR SDK connector for wagmi)
 -   wagmi + viem (wallet connection & Ethereum interactions)
 -   @tanstack/react-query (data fetching)
 -   Next.js + Tailwind (frontend for link generation)
--   Node.js/Next API routes (signature verification)
--   Chrome Extension Manifest V3 (link scanning & badge injection)
+-   AIR Credentials Dashboard (schema & credential management)
+-   Chrome Extension Manifest V3 (link scanning & credential verification)
 
 ## Key Challenges and Analysis
 
 ### Technical Challenges:
 
-1. **Chrome Extension Integration** - Manifest V3 content scripts, message passing, cross-origin requests
-2. **AIR SDK Integration** - wagmi + airkit-connector setup, partner ID configuration
-3. **Cross-Platform Link Detection** - Scanning different sites (Gmail, Discord, Twitter, Calendly) with varying DOM structures
-4. **Real-time Verification** - Fast API calls to check link signatures without blocking UI
-5. **Signature Scheme** - Designing a simple yet secure link signing/verification system using wallet signatures
+1. **🚨 AIR Credentials SDK Integration** - MANDATORY full verifiable credentials system (not simple signatures)
+2. **Dashboard Configuration** - Manual setup of schemas, credentials, and verification programs
+3. **Credential Issuance Flow** - Implementing ZK-proof based credential creation for meeting links
+4. **Chrome Extension Integration** - Manifest V3 content scripts, message passing, credential verification
+5. **Cross-Platform Link Detection** - Scanning different sites (Gmail, Discord, Twitter, Calendly) with varying DOM structures
+6. **ZK Verification Performance** - Fast credential verification without blocking UI
+7. **Privacy-Preserving Proofs** - Using zero-knowledge proofs to verify trust without revealing sensitive data
 
 ### MVP Scope Decisions:
 
+-   🚨 **MANDATORY: Full AIR Credentials SDK integration** (no simple signatures allowed)
 -   Focus on Gmail + one other platform (Discord) for link detection
--   Simple signature scheme using wallet signatures
--   Stub AIR credentials if SDK integration takes too long
--   Local storage for user credentials (no backend database)
+-   "Meeting Link Trust" credential schema with basic fields (URL, creator, timestamp, platform)
+-   Manual dashboard setup for schemas and verification programs
+-   Local wallet storage for issued credentials (managed by AIR SDK)
 
 ## Project Structure
 
@@ -96,22 +100,24 @@ halo/
 
 ## High-level Task Breakdown
 
-### Phase 1: Foundation (4 hours)
+### Phase 1: Foundation + Credentials SDK Setup (5 hours)
 
 -   [x] **T1.1** Setup Next.js project with Tailwind using create-next-app (15 min) ✅
 -   [x] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min) ✅
 -   [x] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min) ✅
 -   [x] **T1.4** Create basic wallet connection page in frontend/app/ (45 min) ✅
 -   [x] **T1.4b** Refactor to navigation header with global wallet state (30 min) ✅
--   [ ] **T1.5** Implement signature utilities in frontend/lib/ (60 min)
--   [ ] **T1.6** Create link verification API endpoint in frontend/app/api/ (45 min)
+-   [ ] **T1.5-NEW** Install AIR Credentials SDK package (15 min)
+-   [ ] **T1.6-NEW** 🚨 MANUAL: Complete dashboard setup (schema, credentials, verification program) (90 min)
+-   [ ] **T1.7-NEW** Configure credentials SDK integration in frontend/lib/ (75 min)
+-   [ ] **T1.8-NEW** Create credential verification API endpoint in frontend/app/api/ (45 min)
 
-### Phase 2: Web App Core Features (3 hours)
+### Phase 2: Credential Issuance & Management (4 hours)
 
--   [ ] **T2.1** Build link generation page with form (45 min)
--   [ ] **T2.2** Implement signed link creation logic (60 min)
--   [ ] **T2.3** Add basic credential management (stub if needed) (45 min)
--   [ ] **T2.4** Create simple landing page with flow explanation (30 min)
+-   [ ] **T2.1-NEW** Build credential issuance UI for "Meeting Link Trust" (60 min)
+-   [ ] **T2.2-NEW** Implement credential creation flow using AIR SDK (90 min)
+-   [ ] **T2.3-NEW** Add credential verification interface (60 min)
+-   [ ] **T2.4-NEW** Update landing page to explain credential-based trust system (30 min)
 
 ### Phase 3: Chrome Extension Foundation (3 hours)
 
@@ -120,11 +126,11 @@ halo/
 -   [ ] **T3.3** Build popup interface for extension (45 min)
 -   [ ] **T3.4** Implement content script injection system (60 min)
 
-### Phase 4: Link Detection & Verification (4 hours)
+### Phase 4: Credential-Based Link Detection & Verification (4 hours)
 
 -   [ ] **T4.1** Create Gmail content script for link detection (90 min)
--   [ ] **T4.2** Build verification API integration in extension (60 min)
--   [ ] **T4.3** Implement trust badge injection system (60 min)
+-   [ ] **T4.2-NEW** Build AIR credential verification integration in extension (75 min)
+-   [ ] **T4.3** Implement ZK-proof based trust badge injection system (75 min)
 -   [ ] **T4.4** Add Discord content script (30 min)
 
 ### Phase 5: Integration & Testing (2 hours)
@@ -137,14 +143,18 @@ halo/
 
 ### Todo
 
--   [ ] Create link signing system
--   [ ] Build Chrome extension
--   [ ] Integrate link detection
--   [ ] Test complete flow
+-   [ ] 🚨 **PRIORITY:** Install AIR Credentials SDK package
+-   [ ] 🚨 **MANUAL:** Complete dashboard setup (schema, credentials, verification program)
+-   [ ] Configure credentials SDK integration
+-   [ ] Build credential issuance UI
+-   [ ] Implement ZK-proof verification in Chrome extension
+-   [ ] Integrate link detection with credential verification
+-   [ ] Test complete credential flow
 
 ### In Progress
 
--   Phase 1: Foundation setup (5/7 tasks complete - 71%)
+-   🚨 CRITICAL PIVOT: Phase 1 Extended (5/8 tasks complete - 63%)
+-   Awaiting manual dashboard setup before proceeding with credentials SDK integration
 
 ### Done
 
@@ -157,10 +167,10 @@ halo/
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Execution - Foundation setup 71% complete  
-**Next Action:** T1.5 - Implement signature utilities for link signing  
-**Blockers:** None - ready for signature implementation  
-**Est. Completion:** T+16 hours from start
+**Current Phase:** 🚨 CRITICAL PIVOT - AIR Credentials SDK Integration (MANDATORY)  
+**Next Action:** T1.5-NEW - Install AIR Credentials SDK, then T1.6-NEW Manual Dashboard Setup  
+**Blockers:** Dashboard configuration required - manual setup of schemas, credentials, verification programs  
+**Est. Completion:** T+17 hours from start (extended due to credentials complexity)
 
 **Recent Updates:**
 
@@ -173,6 +183,8 @@ halo/
 -   ✅ Fixed AuthMessageService singleton issue
 -   ✅ Wallet connection page and components implemented (T1.4 complete)
 -   ✅ **UX Refactor Complete:** Professional header with global wallet state (T1.4b complete)
+-   🚨 **MANDATORY PIVOT:** Full AIR Credentials SDK integration required for hackathon
+-   ❌ **Previous Analysis Obsolete:** Simple wallet signatures NOT allowed - must use formal credentials
 
 ## Executor's Feedback or Assistance Requests
 
@@ -224,15 +236,109 @@ halo/
 -   ✅ **Standard Pattern:** Follows Uniswap/OpenSea/MetaMask style
 -   ✅ **Global State:** Wallet status visible everywhere
 
-**Next Task for Executor:** T1.5 - Implement signature utilities for link signing
+### AIR Credentials SDK Analysis Complete! 📋
+
+**What is AIR Credentials SDK:**
+
+-   `@mocanetwork/air-credential-sdk` - Full verifiable credentials (VC) system
+-   **Issue** formal digital credentials (like degrees, certifications, professional licenses)
+-   **Verify** credentials through standardized verification flows
+-   Designed for institutional credential management (schools, employers, governments)
+
+**vs. AIR Kit Connector (what we have):**
+
+-   `@mocanetwork/airkit-connector` - Wallet connection and basic blockchain interactions
+-   Simpler, focused on wallet auth and signing
+
+**Decision for T1.5:**
+
+✅ **Recommended: Simple Wallet Signatures (MVP approach)**
+
+-   Use connected wallet to sign meeting link data
+-   Fast to implement, perfect for 16-hour hackathon
+-   Chrome extension can verify signatures easily
+-   Upgradeable to full credentials later
+
+❌ **Not Recommended: Full AIR Credentials (overkill for MVP)**
+
+-   Requires issuer/verifier infrastructure setup
+-   Complex credential management workflows
+-   Better suited for formal verification systems
+-   Would consume too much hackathon time
+
+**Next Task for Executor:** T1.5 - Implement simple signature utilities for link signing
 
 **Files to Create for T1.5:**
 
-1. `frontend/lib/signature.ts` - Link signing and verification utilities
-2. Update `frontend/lib/airSdk.ts` - Add credential management hooks
-3. Create signature scheme for meeting links
+1. `frontend/lib/signature.ts` - Wallet-based link signing and verification utilities
+2. Update `frontend/lib/airSdk.ts` - Add simple signing hooks
+3. Create signature scheme: `url + timestamp + signer -> wallet signature`
 
-**Ready for Executor Mode:** Yes, proceed with T1.5
+**Future Enhancement:** After MVP success, could upgrade to AIR Credentials for organizational trust
+
+❌ **OBSOLETE:** This analysis is no longer valid due to mandatory credentials SDK requirement
+
+## 🚨 MANDATORY DASHBOARD SETUP TASKS
+
+### Required Manual Configuration (T1.6-NEW - 90 minutes)
+
+**Prerequisites:**
+
+1. **Login to Sandbox Dashboard:** https://developers.sandbox.air3.com/dashboard
+
+    - Connect with your EOA wallet
+    - Ensure you have access with Partner ID: efaadeae-e2bb-4327-8ffe-e43933c3922a
+
+2. **Generate API Key:**
+
+    - Navigate to: https://developers.sandbox.air3.com/api-key
+    - Generate and securely store API key for SDK integration
+
+3. **Copy Issuer DID:**
+
+    - Copy the Issuer DID from dashboard for .env configuration
+
+4. **Fund Fee Wallet:**
+    - Copy address from Fee wallet tab in dashboard
+    - Fund with MOCA tokens: https://devnet-scan.mocachain.org/faucet
+
+**Schema Creation (Meeting Link Trust):**
+
+-   Navigate to: https://developers.sandbox.air3.com/schema
+-   Create schema with fields:
+    ```
+    meeting_url: String (the actual meeting link)
+    creator_address: String (wallet address of link creator)
+    timestamp: Date (when credential was issued)
+    platform: String (e.g. "Zoom", "Google Meet", "Teams")
+    trust_level: String (e.g. "verified", "organization")
+    ```
+
+**Credential Creation:**
+
+-   Navigate to: https://developers.sandbox.air3.com/credential
+-   Create credential using the "Meeting Link Trust" schema above
+-   Note the credential ID for SDK integration
+
+**Verification Program:**
+
+-   Navigate to: https://developers.sandbox.air3.com/verification
+-   Create program to verify "trusted meeting links"
+-   Configure verification conditions (e.g., check if creator_address matches expected signer)
+-   Note the program ID for Chrome extension integration
+
+### Dashboard Values Needed for .env:
+
+```
+NEXT_PUBLIC_AIR_API_KEY=<from step 2>
+NEXT_PUBLIC_ISSUER_DID=<from step 3>
+NEXT_PUBLIC_CREDENTIAL_ID=<from credential creation>
+NEXT_PUBLIC_PROGRAM_ID=<from verification program>
+NEXT_PUBLIC_PARTNER_ID=efaadeae-e2bb-4327-8ffe-e43933c3922a
+```
+
+**Status:** ⏳ WAITING FOR USER TO COMPLETE DASHBOARD SETUP
+**Next:** After values provided, proceed with T1.7-NEW (SDK integration)
 
 ### T1.4b Code Structure Plan
 
@@ -589,9 +695,17 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - **Result:** Prevents multiple initialization, stable development environment
 
 10. **Wallet Connection UX Anti-Pattern:**
+
     - **Problem:** Created separate `/connect` page for wallet connection - not standard web3 UX
     - **Standard Pattern:** Header/navbar with wallet button, global state, no page navigation required
     - **Solution Plan:** Refactor to navigation header with compact wallet button
     - **Best Practice:** Keep wallet connection contextual and always accessible
+
+11. **🚨 MANDATORY AIR Credentials SDK Requirement:**
+    - **@mocanetwork/airkit-connector:** Wallet connection + basic blockchain interactions (still needed)
+    - **@mocanetwork/air-credential-sdk:** Full verifiable credentials system (MANDATORY for hackathon)
+    - **❌ Previous Decision Reversed:** Simple wallet signatures NOT allowed for hackathon
+    - **New Requirement:** Must implement full credential issuance, ZK proofs, and verification flows
+    - **Dashboard Dependency:** Manual setup of schemas, credentials, and verification programs required
 
 _[Additional lessons learned during implementation will be documented here]_
