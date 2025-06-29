@@ -45,54 +45,62 @@
 
 ```
 halo/
-├── README.md
-├── package.json
-├── next.config.js
-├── tailwind.config.js
-├── .env.local
-├── pages/
-│   ├── index.js              # Landing page
-│   ├── connect.js            # Wallet connection
-│   ├── generate.js           # Link generation
-│   └── api/
-│       ├── verify.js         # Link verification endpoint
-│       └── credentials.js    # Credential management
-├── components/
-│   ├── WalletConnect.js      # Wallet connection component
-│   ├── LinkGenerator.js      # Signed link creation
-│   └── TrustBadge.js         # Trust badge component
-├── lib/
-│   ├── airSdk.js            # AIR SDK utilities
-│   ├── signature.js         # Signature utilities
-│   └── constants.js         # App constants
-├── styles/
-│   └── globals.css
-└── extension/
-    ├── manifest.json        # Chrome extension manifest
-    ├── background.js        # Service worker
-    ├── content/
-    │   ├── gmail.js         # Gmail content script
-    │   ├── discord.js       # Discord content script
-    │   └── common.js        # Shared utilities
-    ├── popup/
-    │   ├── popup.html       # Extension popup
-    │   ├── popup.js         # Popup logic
-    │   └── popup.css        # Popup styles
-    └── assets/
-        ├── icon16.png
-        ├── icon48.png
-        └── icon128.png
+├── frontend/                 # Next.js web application
+│   ├── package.json         # Next.js dependencies & scripts
+│   ├── next.config.ts       # Next.js configuration
+│   ├── tailwind.config.js   # Tailwind CSS config
+│   ├── tsconfig.json        # TypeScript configuration
+│   ├── .env.local           # Environment variables
+│   ├── app/                 # App Router (Next.js 15)
+│   │   ├── page.tsx         # Landing page
+│   │   ├── connect/         # Wallet connection pages
+│   │   ├── generate/        # Link generation pages
+│   │   ├── api/             # API routes
+│   │   │   ├── verify/      # Link verification endpoint
+│   │   │   └── credentials/ # Credential management
+│   │   ├── layout.tsx       # Root layout
+│   │   └── globals.css      # Global styles
+│   ├── components/          # React components
+│   │   ├── WalletConnect.tsx    # Wallet connection component
+│   │   ├── LinkGenerator.tsx    # Signed link creation
+│   │   ├── TrustBadge.tsx       # Trust badge component
+│   │   └── providers/           # Context providers
+│   │       └── WagmiProvider.tsx # Wagmi setup
+│   └── lib/                 # Utilities
+│       ├── airSdk.ts        # AIR SDK utilities
+│       ├── signature.ts     # Signature utilities
+│       ├── wagmiConfig.ts   # Wagmi configuration
+│       └── constants.ts     # App constants
+├── extension/               # Chrome extension
+│   ├── manifest.json        # Chrome extension manifest
+│   ├── background.js        # Service worker
+│   ├── content/
+│   │   ├── gmail.js         # Gmail content script
+│   │   ├── discord.js       # Discord content script
+│   │   └── common.js        # Shared utilities
+│   ├── popup/
+│   │   ├── popup.html       # Extension popup
+│   │   ├── popup.js         # Popup logic
+│   │   └── popup.css        # Popup styles
+│   └── assets/
+│       ├── icon16.png
+│       ├── icon48.png
+│       └── icon128.png
+├── README.md                # Project documentation
+└── .cursor/                 # Development workspace
+    └── scratchpad.md        # This planning document
 ```
 
 ## High-level Task Breakdown
 
 ### Phase 1: Foundation (4 hours)
 
--   [ ] **T1.1** Setup Next.js project with Tailwind (30 min)
--   [ ] **T1.2** Install and configure AIR Account SDK (45 min)
--   [ ] **T1.3** Create basic wallet connection page (45 min)
--   [ ] **T1.4** Implement signature utilities for link signing (60 min)
--   [ ] **T1.5** Create link verification API endpoint (60 min)
+-   [ ] **T1.1** Setup Next.js project with Tailwind using create-next-app (15 min)
+-   [ ] **T1.2** Install and configure AIR SDK dependencies (30 min)
+-   [ ] **T1.3** Setup wagmi providers and configuration (45 min)
+-   [ ] **T1.4** Create basic wallet connection page (45 min)
+-   [ ] **T1.5** Implement signature utilities for link signing (60 min)
+-   [ ] **T1.6** Create link verification API endpoint (45 min)
 
 ### Phase 2: Web App Core Features (3 hours)
 
@@ -142,8 +150,8 @@ halo/
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning (Updated with correct AIR SDK implementation)  
-**Next Action:** Setup Next.js project foundation with correct dependencies  
+**Current Phase:** Planning - Correcting Next.js Setup Approach  
+**Next Action:** Use proper Next.js + Tailwind setup command  
 **Blockers:** Need to obtain Partner ID from MOCA Network for AIR SDK  
 **Est. Completion:** T+16 hours from start
 
@@ -153,15 +161,51 @@ halo/
 -   Updated dependencies to use @mocanetwork/airkit-connector + wagmi
 -   Identified Partner ID requirement for AIR SDK initialization
 -   Updated wallet connection patterns to follow wagmi best practices
+-   Identified need for proper Next.js setup command instead of manual package.json
 
 ## Executor's Feedback or Assistance Requests
 
-_[Executor will update this section with progress reports and requests for assistance]_
+### Current Recommendation from Planner:
 
-## First File to Create
+**Issue Identified:** Initially tried to manually create package.json, but the proper approach is to use Next.js scaffolding command.
 
-**File:** `package.json`  
-**Rationale:** Foundation file that defines dependencies and scripts for the entire project
+**Recommended Command for T1.1:**
+
+```bash
+npx create-next-app@latest . --typescript --tailwind --eslint --app --use-npm
+```
+
+**This will:**
+
+-   Setup Next.js 14 with App Router
+-   Configure Tailwind CSS automatically
+-   Include TypeScript support
+-   Setup ESLint
+-   Create proper project structure
+
+**Next Steps for Executor:**
+
+1. Run the create-next-app command above
+2. Then add AIR SDK dependencies: `npm install @mocanetwork/airkit-connector @tanstack/react-query wagmi viem`
+3. Proceed with T1.2 (wagmi provider setup)
+
+**Ready for Executor Mode:** Yes, with corrected approach
+
+## Correct Next.js Setup Command
+
+**Command:** `npx create-next-app@latest halo-mvp --typescript --tailwind --eslint --app --use-npm`
+
+**Rationale:** This command will:
+
+-   Create Next.js project with TypeScript support
+-   Automatically setup Tailwind CSS
+-   Include ESLint configuration
+-   Use the new App Router (recommended)
+-   Use npm as package manager
+-   Create proper project structure with all necessary config files
+
+**Alternative if we want to setup in current directory:**
+`npx create-next-app@latest . --typescript --tailwind --eslint --app --use-npm`
 
 ## Starter Code Snippets
 
