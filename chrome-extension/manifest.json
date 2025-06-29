@@ -1,10 +1,10 @@
 {
 	"manifest_version": 3,
 	"name": "Halo - Meeting Link Verifier",
-	"version": "1.0.0",
-	"description": "Prevent social engineering attacks by verifying meeting links using onchain credentials and zero-knowledge proofs.",
+	"version": "1.1.0",
+	"description": "Enhanced meeting link verification with caching, rate limiting, and advanced analytics. Prevent social engineering attacks using onchain credentials and zero-knowledge proofs.",
 
-	"permissions": ["storage", "activeTab", "scripting"],
+	"permissions": ["storage", "activeTab", "scripting", "background"],
 
 	"host_permissions": [
 		"https://mail.google.com/*",
@@ -12,7 +12,9 @@
 		"https://web.whatsapp.com/*",
 		"https://teams.microsoft.com/*",
 		"https://slack.com/*",
-		"https://credential.api.sandbox.air3.com/*"
+		"https://air.api.sandbox.air3.com/*",
+		"https://credential.api.sandbox.air3.com/*",
+		"http://localhost:3000/*"
 	],
 
 	"background": {
@@ -37,7 +39,7 @@
 
 	"action": {
 		"default_popup": "popup.html",
-		"default_title": "Halo - Verify Meeting Links",
+		"default_title": "Halo - Enhanced Meeting Link Verification",
 		"default_icon": {
 			"16": "icons/icon16.png",
 			"32": "icons/icon32.png",
@@ -58,5 +60,22 @@
 			"resources": ["trust-badge.html", "verification-modal.html"],
 			"matches": ["<all_urls>"]
 		}
-	]
+	],
+
+	"commands": {
+		"scan-page": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+H",
+				"mac": "Command+Shift+H"
+			},
+			"description": "Scan current page for meeting links"
+		},
+		"toggle-extension": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+T",
+				"mac": "Command+Shift+T"
+			},
+			"description": "Toggle Halo extension on/off"
+		}
+	}
 }
