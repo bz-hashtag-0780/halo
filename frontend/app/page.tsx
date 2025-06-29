@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Home() {
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+		<div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-50 to-indigo-100">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 				<div className="text-center">
 					<h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -20,16 +20,16 @@ export default function Home() {
 
 					<div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
 						<Link
-							href="/connect"
+							href="/generate"
 							className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 shadow-lg"
 						>
-							Connect Wallet & Get Started
+							Generate Signed Link
 						</Link>
 						<Link
-							href="/generate"
+							href="/connect"
 							className="px-8 py-3 bg-white hover:bg-gray-50 text-blue-600 font-semibold rounded-lg border-2 border-blue-600 transition duration-200 shadow-lg"
 						>
-							Generate Signed Link
+							View Wallet Details
 						</Link>
 					</div>
 				</div>

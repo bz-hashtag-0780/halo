@@ -102,7 +102,7 @@ halo/
 -   [x] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min) ✅
 -   [x] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min) ✅
 -   [x] **T1.4** Create basic wallet connection page in frontend/app/ (45 min) ✅
--   [ ] **T1.4b** Refactor to navigation header with global wallet state (30 min)
+-   [x] **T1.4b** Refactor to navigation header with global wallet state (30 min) ✅
 -   [ ] **T1.5** Implement signature utilities in frontend/lib/ (60 min)
 -   [ ] **T1.6** Create link verification API endpoint in frontend/app/api/ (45 min)
 
@@ -137,7 +137,6 @@ halo/
 
 ### Todo
 
--   [ ] Refactor wallet UX to header navigation (T1.4b)
 -   [ ] Create link signing system
 -   [ ] Build Chrome extension
 -   [ ] Integrate link detection
@@ -145,7 +144,7 @@ halo/
 
 ### In Progress
 
--   Phase 1: Foundation setup (4/7 tasks, UX refactor needed)
+-   Phase 1: Foundation setup (5/7 tasks complete - 71%)
 
 ### Done
 
@@ -154,12 +153,13 @@ halo/
 -   [x] Install AIR SDK dependencies in frontend/ folder (T1.2)
 -   [x] Setup wagmi providers and configuration in frontend/ folder (T1.3)
 -   [x] Create basic wallet connection page and components (T1.4)
+-   [x] Refactor to navigation header with global wallet state (T1.4b)
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning - UX Improvement for wallet connection  
-**Next Action:** T1.4b - Implement proper navigation header with global wallet state  
-**Blockers:** None - ready for UX refactor  
+**Current Phase:** Execution - Foundation setup 71% complete  
+**Next Action:** T1.5 - Implement signature utilities for link signing  
+**Blockers:** None - ready for signature implementation  
 **Est. Completion:** T+16 hours from start
 
 **Recent Updates:**
@@ -172,7 +172,7 @@ halo/
 -   ✅ Wagmi providers and AIR SDK configuration complete (T1.3 complete)
 -   ✅ Fixed AuthMessageService singleton issue
 -   ✅ Wallet connection page and components implemented (T1.4 complete)
--   🔄 **UX Issue Identified:** Wallet connection should be in header, not separate page
+-   ✅ **UX Refactor Complete:** Professional header with global wallet state (T1.4b complete)
 
 ## Executor's Feedback or Assistance Requests
 
@@ -192,62 +192,47 @@ halo/
 -   ✅ **Solution:** Implemented singleton pattern in wagmiConfig to prevent multiple AIR SDK instances
 -   ✅ **Testing:** Next.js dev server running successfully on port 3001
 
-### T1.4 Completed Successfully! ✅
+### T1.4b Completed Successfully! ✅
 
-**Status:** Wallet connection page and components successfully implemented
+**Status:** Navigation header with global wallet state successfully implemented
 
 **Files Created:**
 
--   ✅ `frontend/lib/airSdk.ts` - AIR SDK utility hooks (useWalletConnection, useAirkit)
--   ✅ `frontend/components/WalletConnect.tsx` - Complete wallet connection component
--   ✅ `frontend/app/connect/page.tsx` - Dedicated wallet connection page
--   ✅ Updated `frontend/app/page.tsx` - Beautiful landing page with navigation
+-   ✅ `frontend/components/layout/Header.tsx` - Professional navigation header
+-   ✅ `frontend/components/layout/WalletButton.tsx` - Compact wallet button with dropdown
+
+**Files Modified:**
+
+-   ✅ `frontend/lib/airSdk.ts` - Added formatAddress utility function
+-   ✅ `frontend/app/layout.tsx` - Integrated header on all pages
+-   ✅ `frontend/app/page.tsx` - Updated CTA buttons and responsive design
 
 **Features Implemented:**
 
--   ✅ Connect/disconnect wallet functionality
--   ✅ Connection status display with address and network
--   ✅ Loading states and error handling
--   ✅ Responsive UI with Tailwind CSS
--   ✅ Navigation between landing page and connect page
+-   ✅ Professional header with logo, navigation, and wallet button
+-   ✅ Compact wallet button with 3 states (disconnected/connecting/connected)
+-   ✅ Dropdown with full address, network info, and disconnect button
+-   ✅ Responsive mobile design with hamburger menu
+-   ✅ Global wallet state visible on all pages
+-   ✅ Address formatting utility (0x1234...5678)
+-   ✅ Professional web3 UX following industry standards
 
-### UX Issue Identified - Wallet Connection Needs Refactor! 🔄
+**UX Improvements:**
 
-**Problem:** Current wallet connection UX is non-standard:
+-   ❌ **Before:** Separate `/connect` page, awkward navigation
+-   ✅ **After:** Header-based wallet connection, always accessible
+-   ✅ **Standard Pattern:** Follows Uniswap/OpenSea/MetaMask style
+-   ✅ **Global State:** Wallet status visible everywhere
 
--   ❌ Separate `/connect` page is awkward
--   ❌ Users have to navigate away from main flow
--   ❌ No persistent wallet state visible across app
--   ❌ Not following web3 UX best practices
+**Next Task for Executor:** T1.5 - Implement signature utilities for link signing
 
-**Solution:** Standard web3 navigation pattern:
+**Files to Create for T1.5:**
 
--   ✅ Header/navbar with compact wallet button
--   ✅ Global wallet state visible everywhere
--   ✅ Connect/disconnect without leaving page
--   ✅ Abbreviated address display when connected
+1. `frontend/lib/signature.ts` - Link signing and verification utilities
+2. Update `frontend/lib/airSdk.ts` - Add credential management hooks
+3. Create signature scheme for meeting links
 
-**Next Task for Executor:** T1.4b - Refactor to navigation header with global wallet state
-
-**Files to Create/Modify for T1.4b:**
-
-1. **Create** `frontend/components/layout/Header.tsx` - Navigation header
-2. **Create** `frontend/components/layout/WalletButton.tsx` - Compact wallet button
-3. **Modify** `frontend/app/layout.tsx` - Add header to all pages
-4. **Modify** `frontend/app/page.tsx` - Remove separate "Connect Wallet" button
-5. **Optional** Keep `frontend/app/connect/page.tsx` for detailed wallet info
-
-**Design Requirements:**
-
--   Header with logo, navigation links, and wallet button
--   Wallet button shows "Connect Wallet" when disconnected
--   When connected: shows abbreviated address (0x1234...5678) + disconnect option
--   Responsive design for mobile/desktop
--   Clean, professional styling matching current design
-
-**After T1.4b:** Proceed with T1.5 - Implement signature utilities
-
-**Ready for Executor Mode:** Yes, proceed with T1.4b refactor
+**Ready for Executor Mode:** Yes, proceed with T1.5
 
 ### T1.4b Code Structure Plan
 
