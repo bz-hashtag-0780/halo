@@ -6,7 +6,7 @@ export default function Home() {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 				<div className="text-center">
 					<h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-						🛡️ Halo MVP
+						🛡️ Halo
 					</h1>
 					<h2 className="text-xl md:text-2xl text-gray-700 mb-8">
 						Social Engineering Prevention Tool

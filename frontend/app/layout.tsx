@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: 'Halo MVP - Social Engineering Prevention',
+	title: 'Halo - Social Engineering Prevention',
 	description:
 		'Prevents social engineering attacks by verifying meeting links with onchain credentials',
 };
