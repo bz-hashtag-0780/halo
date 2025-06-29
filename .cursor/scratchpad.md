@@ -95,12 +95,12 @@ halo/
 
 ### Phase 1: Foundation (4 hours)
 
--   [ ] **T1.1** Setup Next.js project with Tailwind using create-next-app (15 min)
--   [ ] **T1.2** Install and configure AIR SDK dependencies (30 min)
--   [ ] **T1.3** Setup wagmi providers and configuration (45 min)
--   [ ] **T1.4** Create basic wallet connection page (45 min)
--   [ ] **T1.5** Implement signature utilities for link signing (60 min)
--   [ ] **T1.6** Create link verification API endpoint (45 min)
+-   [x] **T1.1** Setup Next.js project with Tailwind using create-next-app (15 min) ✅
+-   [ ] **T1.2** Install AIR SDK dependencies in frontend/ folder (30 min)
+-   [ ] **T1.3** Setup wagmi providers and configuration in frontend/ (45 min)
+-   [ ] **T1.4** Create basic wallet connection page in frontend/app/ (45 min)
+-   [ ] **T1.5** Implement signature utilities in frontend/lib/ (60 min)
+-   [ ] **T1.6** Create link verification API endpoint in frontend/app/api/ (45 min)
 
 ### Phase 2: Web App Core Features (3 hours)
 
@@ -133,7 +133,8 @@ halo/
 
 ### Todo
 
--   [ ] Setup project foundation
+-   [ ] Install AIR SDK dependencies
+-   [ ] Setup wagmi providers
 -   [ ] Implement wallet connection
 -   [ ] Create link signing system
 -   [ ] Build Chrome extension
@@ -142,54 +143,51 @@ halo/
 
 ### In Progress
 
--   Planning phase
+-   Phase 1: Foundation setup
 
 ### Done
 
 -   [x] Project planning and structure design
+-   [x] Next.js project setup with TypeScript + Tailwind CSS in frontend/ folder (T1.1)
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning - Correcting Next.js Setup Approach  
-**Next Action:** Use proper Next.js + Tailwind setup command  
+**Current Phase:** Planning - Updated for frontend/ folder structure  
+**Next Action:** Configure AIR SDK dependencies in frontend/ folder  
 **Blockers:** Need to obtain Partner ID from MOCA Network for AIR SDK  
 **Est. Completion:** T+16 hours from start
 
 **Recent Updates:**
 
--   Analyzed airkit-example-main and corrected AIR SDK implementation
--   Updated dependencies to use @mocanetwork/airkit-connector + wagmi
--   Identified Partner ID requirement for AIR SDK initialization
--   Updated wallet connection patterns to follow wagmi best practices
--   Identified need for proper Next.js setup command instead of manual package.json
+-   ✅ Next.js project successfully created in `frontend/` folder
+-   ✅ Project structure updated to reflect frontend/ organization
+-   ✅ Next.js 15 + TypeScript + Tailwind CSS v4 + ESLint configured
+-   Updated all file paths to reference frontend/ directory
+-   Ready for T1.2: Install AIR SDK dependencies in frontend folder
 
 ## Executor's Feedback or Assistance Requests
 
-### Current Recommendation from Planner:
+### T1.1 Completed Successfully! ✅
 
-**Issue Identified:** Initially tried to manually create package.json, but the proper approach is to use Next.js scaffolding command.
+**Status:** Next.js project created in `frontend/` folder
 
-**Recommended Command for T1.1:**
+-   ✅ Next.js 15.3.4 with App Router
+-   ✅ TypeScript 5 configured
+-   ✅ Tailwind CSS v4 setup
+-   ✅ ESLint configuration
+-   ✅ React 19
+
+**Next Task for Executor:** T1.2 - Install AIR SDK dependencies
+
+**Working Directory:** All future frontend tasks should work in `frontend/` folder
+
+**Command for T1.2:**
 
 ```bash
-npx create-next-app@latest . --typescript --tailwind --eslint --app --use-npm
+cd frontend && npm install @mocanetwork/airkit-connector @tanstack/react-query wagmi viem tailwind-merge
 ```
 
-**This will:**
-
--   Setup Next.js 14 with App Router
--   Configure Tailwind CSS automatically
--   Include TypeScript support
--   Setup ESLint
--   Create proper project structure
-
-**Next Steps for Executor:**
-
-1. Run the create-next-app command above
-2. Then add AIR SDK dependencies: `npm install @mocanetwork/airkit-connector @tanstack/react-query wagmi viem`
-3. Proceed with T1.2 (wagmi provider setup)
-
-**Ready for Executor Mode:** Yes, with corrected approach
+**Ready for Executor Mode:** Yes, proceed with T1.2
 
 ## Correct Next.js Setup Command
 
@@ -378,8 +376,15 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - Access AirService through connector.airService
 
 4. **Wallet Connection Flow:**
+
     - Find connector with `connector?.isMocaNetwork` property
     - Use standard wagmi useConnect hook
     - Connection state managed through wagmi hooks
+
+5. **Project Structure Decision:**
+    - Next.js project created in `frontend/` subfolder due to directory conflicts
+    - All web app files are in `frontend/` directory
+    - Chrome extension will be in separate `extension/` folder at root level
+    - Executor must work in `frontend/` folder for all web app tasks
 
 _[Additional lessons learned during implementation will be documented here]_
