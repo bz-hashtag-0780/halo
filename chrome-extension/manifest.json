@@ -1,0 +1,62 @@
+{
+	"manifest_version": 3,
+	"name": "Halo - Meeting Link Verifier",
+	"version": "1.0.0",
+	"description": "Prevent social engineering attacks by verifying meeting links using onchain credentials and zero-knowledge proofs.",
+
+	"permissions": ["storage", "activeTab", "scripting"],
+
+	"host_permissions": [
+		"https://mail.google.com/*",
+		"https://discord.com/*",
+		"https://web.whatsapp.com/*",
+		"https://teams.microsoft.com/*",
+		"https://slack.com/*",
+		"https://credential.api.sandbox.air3.com/*"
+	],
+
+	"background": {
+		"service_worker": "background.js",
+		"type": "module"
+	},
+
+	"content_scripts": [
+		{
+			"matches": [
+				"https://mail.google.com/*",
+				"https://discord.com/*",
+				"https://web.whatsapp.com/*",
+				"https://teams.microsoft.com/*",
+				"https://slack.com/*"
+			],
+			"js": ["content.js"],
+			"css": ["content.css"],
+			"run_at": "document_end"
+		}
+	],
+
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "Halo - Verify Meeting Links",
+		"default_icon": {
+			"16": "icons/icon16.png",
+			"32": "icons/icon32.png",
+			"48": "icons/icon48.png",
+			"128": "icons/icon128.png"
+		}
+	},
+
+	"icons": {
+		"16": "icons/icon16.png",
+		"32": "icons/icon32.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+
+	"web_accessible_resources": [
+		{
+			"resources": ["trust-badge.html", "verification-modal.html"],
+			"matches": ["<all_urls>"]
+		}
+	]
+}

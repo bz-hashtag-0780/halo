@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Halo - Meeting Link Verifier</title>
+		<link rel="stylesheet" href="popup.css" />
+	</head>
+	<body>
+		<div class="popup-container">
+			<!-- Header -->
+			<div class="popup-header">
+				<div class="logo">
+					<span class="logo-icon">🛡️</span>
+					<span class="logo-text">Halo</span>
+				</div>
+				<div class="version">v1.0.0</div>
+			</div>
+
+			<!-- Status Section -->
+			<div class="status-section">
+				<div class="status-item">
+					<span class="status-icon" id="extensionStatus">🔴</span>
+					<span class="status-label">Extension Status:</span>
+					<span class="status-value" id="extensionStatusText"
+						>Loading...</span
+					>
+				</div>
+				<div class="toggle-container">
+					<label class="toggle-switch">
+						<input type="checkbox" id="enableToggle" />
+						<span class="toggle-slider"></span>
+					</label>
+					<span class="toggle-label">Enable Verification</span>
+				</div>
+			</div>
+
+			<!-- Stats Section -->
+			<div class="stats-section">
+				<h3>Statistics</h3>
+				<div class="stats-grid">
+					<div class="stat-item">
+						<div class="stat-number" id="linksScanned">-</div>
+						<div class="stat-label">Links Scanned</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number" id="linksVerified">-</div>
+						<div class="stat-label">Verified</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number" id="threatsBlocked">-</div>
+						<div class="stat-label">Threats Blocked</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Current Tab Section -->
+			<div class="current-tab-section">
+				<h3>Current Tab</h3>
+				<div class="tab-info">
+					<div class="tab-url" id="currentTabUrl">Loading...</div>
+					<button class="scan-button" id="scanButton">
+						<span class="button-icon">🔍</span>
+						Scan for Links
+					</button>
+				</div>
+				<div
+					class="scan-results"
+					id="scanResults"
+					style="display: none"
+				>
+					<div class="results-header">Scan Results:</div>
+					<div class="results-content" id="resultsContent"></div>
+				</div>
+			</div>
+
+			<!-- Settings Section -->
+			<div class="settings-section">
+				<h3>Settings</h3>
+				<div class="setting-item">
+					<label class="setting-toggle">
+						<input type="checkbox" id="autoScanToggle" />
+						<span class="setting-slider"></span>
+					</label>
+					<span class="setting-label">Auto-scan pages</span>
+				</div>
+				<div class="setting-item">
+					<label class="setting-toggle">
+						<input type="checkbox" id="showBadgesToggle" />
+						<span class="setting-slider"></span>
+					</label>
+					<span class="setting-label">Show trust badges</span>
+				</div>
+			</div>
+
+			<!-- Quick Actions -->
+			<div class="actions-section">
+				<button class="action-button primary" id="generateButton">
+					<span class="button-icon">🎫</span>
+					Generate Verified Link
+				</button>
+				<button class="action-button secondary" id="verifyButton">
+					<span class="button-icon">🔍</span>
+					Verify Link
+				</button>
+			</div>
+
+			<!-- Footer -->
+			<div class="popup-footer">
+				<div class="footer-links">
+					<a href="#" id="helpLink">Help</a>
+					<a href="#" id="settingsLink">Settings</a>
+					<a href="#" id="aboutLink">About</a>
+				</div>
+				<div class="footer-text">Powered by AIR Credentials</div>
+			</div>
+		</div>
+
+		<script src="popup.js"></script>
+	</body>
+</html>
