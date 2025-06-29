@@ -36,6 +36,12 @@ export function Header() {
 							Generate Link
 						</Link>
 						<Link
+							href="/verify"
+							className="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium transition duration-200"
+						>
+							Verify Link
+						</Link>
+						<Link
 							href="/connect"
 							className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition duration-200"
 						>
@@ -102,6 +108,13 @@ export function Header() {
 								onClick={() => setIsMobileMenuOpen(false)}
 							>
 								Generate Link
+							</Link>
+							<Link
+								href="/verify"
+								className="block px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-gray-100 rounded-md text-sm font-medium transition duration-200"
+								onClick={() => setIsMobileMenuOpen(false)}
+							>
+								Verify Link
 							</Link>
 							<Link
 								href="/connect"

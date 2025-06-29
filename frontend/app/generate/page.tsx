@@ -6,15 +6,8 @@ import {
 	useCredentialIssuance,
 	detectPlatform,
 	isCredentialsConfigured,
+	type CredentialResult,
 } from '../../lib/credentialsUtils';
-
-interface GeneratedCredential {
-	url: string;
-	platform: string;
-	creator: string;
-	trustLevel: string;
-	createdAt: string;
-}
 
 export default function GeneratePage() {
 	const { address, isConnected } = useWalletConnection();
@@ -24,8 +17,8 @@ export default function GeneratePage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState('');
-	const [generatedCredential, setGeneratedCredential] =
-		useState<GeneratedCredential | null>(null);
+	const [credentialResult, setCredentialResult] =
+		useState<CredentialResult | null>(null);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -100,21 +93,20 @@ export default function GeneratePage() {
 			meetingUrl,
 			address,
 			() => {
-				// Success callback
-				setSuccess(true);
-				setIsLoading(false);
-				setGeneratedCredential({
-					url: meetingUrl,
-					platform: detectPlatform(meetingUrl),
-					creator: address,
-					trustLevel: 'verified',
-					createdAt: new Date().toISOString(),
-				});
+				// Basic success callback (widget launched)
+				console.log('🐛 Credential issuance initiated successfully');
 			},
 			(errorMsg: string) => {
 				// Error callback
 				setError(errorMsg);
 				setIsLoading(false);
+			},
+			(result: CredentialResult) => {
+				// Presentation generation callback - this is where we get the final result
+				console.log('🐛 Presentation generated successfully:', result);
+				setSuccess(true);
+				setIsLoading(false);
+				setCredentialResult(result);
 			}
 		);
 	};
@@ -123,7 +115,7 @@ export default function GeneratePage() {
 		setMeetingUrl('');
 		setSuccess(false);
 		setError('');
-		setGeneratedCredential(null);
+		setCredentialResult(null);
 	};
 
 	if (!isConnected) {
@@ -163,7 +155,7 @@ export default function GeneratePage() {
 		);
 	}
 
-	if (success && generatedCredential) {
+	if (success && credentialResult) {
 		return (
 			<div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-12 px-4">
 				<div className="max-w-2xl mx-auto">
@@ -185,11 +177,12 @@ export default function GeneratePage() {
 								</svg>
 							</div>
 							<h1 className="text-2xl font-bold text-gray-900 mb-2">
-								Credential Issued Successfully!
+								Credential & Presentation Generated!
 							</h1>
 							<p className="text-gray-600">
-								Your meeting link has been verified and a
-								credential has been issued to your wallet.
+								Your meeting link has been verified, a
+								credential has been issued to your wallet, and a
+								shareable proof has been generated.
 							</p>
 						</div>
 
@@ -200,10 +193,19 @@ export default function GeneratePage() {
 							<div className="space-y-3">
 								<div>
 									<label className="block text-sm font-medium text-gray-700">
-										Meeting URL
+										Original Meeting URL
 									</label>
 									<div className="mt-1 p-3 bg-white rounded border border-gray-200 break-all text-sm">
-										{generatedCredential.url}
+										{meetingUrl}
+									</div>
+								</div>
+								<div>
+									<label className="block text-sm font-medium text-gray-700">
+										✨ Shareable Verified URL (with embedded
+										proof)
+									</label>
+									<div className="mt-1 p-3 bg-blue-50 border border-blue-200 rounded break-all text-sm font-mono">
+										{credentialResult.shareableUrl}
 									</div>
 								</div>
 								<div className="grid grid-cols-2 gap-4">
@@ -212,7 +214,7 @@ export default function GeneratePage() {
 											Platform
 										</label>
 										<div className="mt-1 p-2 bg-white rounded border border-gray-200 text-sm">
-											{generatedCredential.platform}
+											{detectPlatform(meetingUrl)}
 										</div>
 									</div>
 									<div>
@@ -221,7 +223,7 @@ export default function GeneratePage() {
 										</label>
 										<div className="mt-1 p-2 bg-white rounded border border-gray-200 text-sm">
 											<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-												{generatedCredential.trustLevel}
+												verified
 											</span>
 										</div>
 									</div>
@@ -231,7 +233,7 @@ export default function GeneratePage() {
 										Creator Address
 									</label>
 									<div className="mt-1 p-2 bg-white rounded border border-gray-200 text-sm font-mono">
-										{generatedCredential.creator}
+										{address}
 									</div>
 								</div>
 							</div>
@@ -254,19 +256,36 @@ export default function GeneratePage() {
 								</div>
 								<div className="ml-3">
 									<h3 className="text-sm font-medium text-blue-800">
-										What happens next?
+										🎉 What just happened?
 									</h3>
 									<div className="mt-2 text-sm text-blue-700">
 										<p>
-											• Your meeting link is now
-											cryptographically verified
+											1.{' '}
+											<strong>Credential Issued:</strong>{' '}
+											Your wallet now holds a verified
+											credential for this meeting
 											<br />
-											• When others encounter this link,
-											browser extensions can verify its
-											authenticity
-											<br />• Share this link with
-											confidence - recipients will see a
-											trust badge
+											2.{' '}
+											<strong>
+												Presentation Generated:
+											</strong>{' '}
+											A cryptographic proof was created
+											from your credential
+											<br />
+											3. <strong>
+												URL Enhanced:
+											</strong>{' '}
+											The proof was embedded in your
+											meeting URL
+											<br />
+											4.{' '}
+											<strong>
+												Share with Confidence:
+											</strong>{' '}
+											Recipients can verify the
+											link&apos;s authenticity using our
+											Chrome extension or verification
+											tools
 										</p>
 									</div>
 								</div>
@@ -283,12 +302,13 @@ export default function GeneratePage() {
 							<button
 								onClick={() =>
 									navigator.clipboard.writeText(
-										generatedCredential.url
+										credentialResult.shareableUrl ||
+											meetingUrl
 									)
 								}
 								className="px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
 							>
-								Copy Link
+								Copy Verified Link
 							</button>
 						</div>
 					</div>

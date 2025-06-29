@@ -26,6 +26,12 @@ export default function Home() {
 							Generate Signed Link
 						</Link>
 						<Link
+							href="/verify"
+							className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-200 shadow-lg"
+						>
+							Verify Link
+						</Link>
+						<Link
 							href="/connect"
 							className="px-8 py-3 bg-white hover:bg-gray-50 text-blue-600 font-semibold rounded-lg border-2 border-blue-600 transition duration-200 shadow-lg"
 						>

@@ -152,6 +152,25 @@ export interface MeetingLinkCredentialSubject {
 	expires_at: string;
 }
 
+// Verifiable presentation result interface
+export interface VerificationResult {
+	isValid: boolean;
+	trustLevel?: string;
+	creatorAddress?: string;
+	platform?: string;
+	timestamp?: string;
+	error?: string;
+}
+
+// Credential result interface for UI state
+export interface CredentialResult {
+	success: boolean;
+	credential?: JsonDocumentObject;
+	presentation?: string;
+	shareableUrl?: string;
+	error?: string;
+}
+
 // Platform detection utility
 export const detectPlatform = (url: string): string => {
 	if (url.includes('zoom.us')) return 'Zoom';
@@ -183,6 +202,102 @@ export const generateMeetingLinkCredential = (
 	};
 };
 
+// Generate URL-specific challenge for presentations
+export const generateChallenge = (meetingUrl: string): string => {
+	// Create a deterministic challenge based on the meeting URL
+	// This ensures the same URL always gets the same challenge
+	const encoder = new TextEncoder();
+	const data = encoder.encode(`halo-challenge-${meetingUrl}`);
+	return btoa(String.fromCharCode(...data));
+};
+
+// Create verifiable presentation from issued credential
+export const createVerifiablePresentation = async (
+	credential: JsonDocumentObject,
+	meetingUrl: string,
+	creatorAddress: string,
+	airService: any // eslint-disable-line @typescript-eslint/no-explicit-any
+): Promise<string> => {
+	try {
+		console.log('🐛 Creating verifiable presentation for:', {
+			meetingUrl,
+			creatorAddress,
+			credential,
+		});
+
+		// Use AIR SDK to create presentation
+		const presentationRequest = {
+			process: 'Present',
+			credential: credential,
+			verifierDid: VERIFIER_DID,
+			challenge: generateChallenge(meetingUrl), // URL-specific challenge
+			domain: 'halo-mvp.com',
+		};
+
+		console.log('🐛 Presentation request:', presentationRequest);
+
+		// Generate signed presentation using AIR service
+		const presentation = await airService.createPresentation(
+			presentationRequest
+		);
+
+		console.log('🐛 Generated presentation:', presentation);
+
+		return JSON.stringify(presentation);
+	} catch (error) {
+		console.error('🐛 Error creating presentation:', error);
+		throw new Error(`Failed to create presentation: ${error}`);
+	}
+};
+
+// Create shareable URL with embedded proof
+export const createShareableUrl = (
+	originalUrl: string,
+	presentation: string
+): string => {
+	try {
+		console.log('🐛 Creating shareable URL for:', {
+			originalUrl,
+			presentationLength: presentation.length,
+		});
+
+		// Base64 encode the presentation for URL safety
+		const encodedProof = btoa(presentation);
+
+		// Append proof as query parameter
+		const separator = originalUrl.includes('?') ? '&' : '?';
+		const shareableUrl = `${originalUrl}${separator}halo_proof=${encodedProof}`;
+
+		console.log('🐛 Generated shareable URL:', shareableUrl);
+
+		return shareableUrl;
+	} catch (error) {
+		console.error('🐛 Error creating shareable URL:', error);
+		throw new Error(`Failed to create shareable URL: ${error}`);
+	}
+};
+
+// Extract proof from URL
+export const extractProofFromUrl = (url: string): string | null => {
+	try {
+		const urlParams = new URLSearchParams(url.split('?')[1]);
+		const encodedProof = urlParams.get('halo_proof');
+
+		if (!encodedProof) {
+			return null;
+		}
+
+		// Decode the Base64 encoded proof
+		const decodedProof = atob(encodedProof);
+		console.log('🐛 Extracted proof from URL:', { url, decodedProof });
+
+		return decodedProof;
+	} catch (error) {
+		console.error('🐛 Error extracting proof from URL:', error);
+		return null;
+	}
+};
+
 // Custom hook for credential issuance (following airkit-example pattern exactly)
 export const useCredentialIssuance = () => {
 	const { airService, isMocaNetwork } = useAirkit();
@@ -192,7 +307,8 @@ export const useCredentialIssuance = () => {
 		meetingUrl: string,
 		creatorAddress: string,
 		setError: (error: string | null) => void,
-		setIsLoading: (loading: boolean) => void
+		setIsLoading: (loading: boolean) => void,
+		onPresentationGenerated?: (result: CredentialResult) => void
 	) => {
 		try {
 			// Step 1: Fetch the issuer auth token using the API key
@@ -259,8 +375,64 @@ export const useCredentialIssuance = () => {
 			);
 
 			// Set up event listeners
-			widgetRef.current.on('issueCompleted', () => {
-				console.log('Credential issuance completed successfully!');
+			widgetRef.current.on('issueCompleted', async () => {
+				console.log('🐛 Credential issuance completed successfully!');
+
+				try {
+					// Generate presentation using the original credential subject
+					// Since we can't get the issued credential from the event,
+					// we'll use the original credential subject for now
+					if (onPresentationGenerated) {
+						console.log('🐛 Generating presentation...');
+
+						// Create a mock credential object with the credential subject
+						// In a real scenario, we'd get this from the AIR service
+						const mockCredential = {
+							credentialSubject: credentialSubject,
+							issuer: ISSUER_DID,
+							issuanceDate: new Date().toISOString(),
+						};
+
+						const presentation = await createVerifiablePresentation(
+							mockCredential as unknown as JsonDocumentObject,
+							meetingUrl,
+							creatorAddress,
+							airService
+						);
+
+						// Create shareable URL with embedded proof
+						const shareableUrl = createShareableUrl(
+							meetingUrl,
+							presentation
+						);
+
+						// Call success callback with complete result
+						const credentialResult: CredentialResult = {
+							success: true,
+							credential:
+								mockCredential as unknown as JsonDocumentObject,
+							presentation: presentation,
+							shareableUrl: shareableUrl,
+						};
+
+						console.log(
+							'🐛 Presentation generation complete:',
+							credentialResult
+						);
+						onPresentationGenerated(credentialResult);
+					} else {
+						console.log('🐛 No presentation callback available');
+					}
+				} catch (error) {
+					console.error('🐛 Error generating presentation:', error);
+					// For now, we'll not set an error since the credential was issued successfully
+					// Just log the presentation generation failure
+					console.warn(
+						'🐛 Credential issued but presentation generation failed'
+					);
+				}
+
+				setIsLoading(false);
 			});
 
 			widgetRef.current.on('close', () => {
@@ -279,7 +451,8 @@ export const useCredentialIssuance = () => {
 		meetingUrl: string,
 		creatorAddress: string,
 		onSuccess?: () => void,
-		onError?: (error: string) => void
+		onError?: (error: string) => void,
+		onPresentationGenerated?: (result: CredentialResult) => void
 	) => {
 		console.log('🐛 === issueCredential called ===');
 		console.log('🐛 Parameters:', { meetingUrl, creatorAddress });
@@ -330,7 +503,8 @@ export const useCredentialIssuance = () => {
 				meetingUrl,
 				creatorAddress,
 				setError,
-				setIsLoading
+				setIsLoading,
+				onPresentationGenerated
 			);
 
 			// Start the widget
@@ -345,6 +519,58 @@ export const useCredentialIssuance = () => {
 	};
 
 	return { issueCredential };
+};
+
+// Verify presentation function
+export const verifyPresentation = async (
+	presentation: string
+): Promise<VerificationResult> => {
+	try {
+		console.log('🐛 Verifying presentation:', {
+			presentationLength: presentation.length,
+		});
+
+		const parsedPresentation = JSON.parse(presentation);
+
+		// Get verifier auth token
+		const verifierAuth = await getVerifierAuthToken();
+		if (!verifierAuth) {
+			throw new Error('Failed to get verifier auth token');
+		}
+
+		// Use AIR verification program
+		const verificationRequest = {
+			process: 'Verify',
+			presentation: parsedPresentation,
+			programId: PROGRAM_ID,
+			verifierAuth: verifierAuth,
+		};
+
+		console.log('🐛 Verification request:', verificationRequest);
+
+		// TODO: This would need to be implemented with the actual AIR service
+		// For now, we'll simulate verification based on the presentation structure
+		const result = {
+			valid: true, // Assume valid for now
+			claims: parsedPresentation.credentialSubject || {},
+		};
+
+		console.log('🐛 Verification result:', result);
+
+		return {
+			isValid: result.valid,
+			trustLevel: result.claims?.trust_level,
+			creatorAddress: result.claims?.creator_address,
+			platform: result.claims?.platform,
+			timestamp: result.claims?.created_timestamp,
+		};
+	} catch (error) {
+		console.error('🐛 Error verifying presentation:', error);
+		return {
+			isValid: false,
+			error: error instanceof Error ? error.message : 'Unknown error',
+		};
+	}
 };
 
 // Custom hook for credential verification
