@@ -66,14 +66,14 @@ export default function Home() {
 					</div>
 
 					<div className="bg-white rounded-lg shadow-md p-6">
-						<div className="text-3xl mb-4">⛓️</div>
+						<div className="text-3xl mb-4">✅</div>
 						<h3 className="text-xl font-semibold text-gray-900 mb-3">
-							Onchain Verification
+							Verify Trust
 						</h3>
 						<p className="text-gray-600">
-							Uses AIR SDK and Moca Testnet for decentralized
-							credential verification. No central authority
-							needed.
+							Recipients can verify embedded proofs in meeting
+							URLs without revealing sensitive information. Trust
+							badges show verification status.
 						</p>
 					</div>
 				</div>
