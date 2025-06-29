@@ -17,8 +17,9 @@
 
 **Tech Stack:**
 
--   AIR Account SDK (wallet login & identity)
--   AIR Credential SDK (issuing & verifying credentials)
+-   @mocanetwork/airkit-connector (AIR SDK connector for wagmi)
+-   wagmi + viem (wallet connection & Ethereum interactions)
+-   @tanstack/react-query (data fetching)
 -   Next.js + Tailwind (frontend for link generation)
 -   Node.js/Next API routes (signature verification)
 -   Chrome Extension Manifest V3 (link scanning & badge injection)
@@ -28,10 +29,10 @@
 ### Technical Challenges:
 
 1. **Chrome Extension Integration** - Manifest V3 content scripts, message passing, cross-origin requests
-2. **AIR SDK Integration** - Learning curve for wallet connection and credential management
+2. **AIR SDK Integration** - wagmi + airkit-connector setup, partner ID configuration
 3. **Cross-Platform Link Detection** - Scanning different sites (Gmail, Discord, Twitter, Calendly) with varying DOM structures
 4. **Real-time Verification** - Fast API calls to check link signatures without blocking UI
-5. **Signature Scheme** - Designing a simple yet secure link signing/verification system
+5. **Signature Scheme** - Designing a simple yet secure link signing/verification system using wallet signatures
 
 ### MVP Scope Decisions:
 
@@ -141,10 +142,17 @@ halo/
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** Planning  
-**Next Action:** Setup Next.js project foundation  
-**Blockers:** None identified yet  
+**Current Phase:** Planning (Updated with correct AIR SDK implementation)  
+**Next Action:** Setup Next.js project foundation with correct dependencies  
+**Blockers:** Need to obtain Partner ID from MOCA Network for AIR SDK  
 **Est. Completion:** T+16 hours from start
+
+**Recent Updates:**
+
+-   Analyzed airkit-example-main and corrected AIR SDK implementation
+-   Updated dependencies to use @mocanetwork/airkit-connector + wagmi
+-   Identified Partner ID requirement for AIR SDK initialization
+-   Updated wallet connection patterns to follow wagmi best practices
 
 ## Executor's Feedback or Assistance Requests
 
@@ -173,8 +181,10 @@ _[Executor will update this section with progress reports and requests for assis
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"tailwindcss": "^3.3.0",
-		"@air/account-sdk": "latest",
-		"@air/credential-sdk": "latest"
+		"@mocanetwork/airkit-connector": "^1.4.2",
+		"@tanstack/react-query": "^5.75.5",
+		"wagmi": "^2.15.6",
+		"viem": "^2.29.0"
 	}
 }
 ```
@@ -183,15 +193,26 @@ _[Executor will update this section with progress reports and requests for assis
 
 ```javascript
 // lib/airSdk.js
-import { useAccount } from '@air/account-sdk';
+import { useAccount, useConnect, useDisconnect, useConfig } from 'wagmi';
 
 export const useWalletConnection = () => {
-	const { connect, disconnect, account, isConnected } = useAccount();
+	const { address, isConnected, chainId } = useAccount();
+	const { connect, isPending: isConnecting } = useConnect();
+	const { disconnect, isPending: isDisconnecting } = useDisconnect();
+	const config = useConfig();
 
 	const connectWallet = async () => {
 		try {
-			await connect();
-			return { success: true, account };
+			const airConnector = config.connectors.find(
+				(connector) => connector?.isMocaNetwork
+			);
+
+			if (!airConnector) {
+				throw new Error('AIR connector not found');
+			}
+
+			await connect({ connector: airConnector });
+			return { success: true, address };
 		} catch (error) {
 			return { success: false, error: error.message };
 		}
@@ -200,29 +221,73 @@ export const useWalletConnection = () => {
 	return {
 		connectWallet,
 		disconnect,
-		account,
+		address,
 		isConnected,
+		isConnecting,
+		isDisconnecting,
+		chainId,
 	};
+};
+```
+
+### AIR SDK Configuration
+
+```javascript
+// lib/wagmiConfig.js
+import { airConnector } from '@mocanetwork/airkit-connector';
+import { createConfig, http } from 'wagmi';
+import { BUILD_ENV } from '@mocanetwork/airkit';
+
+export const getWagmiConfig = (partnerId) => {
+	const connectors = [
+		airConnector({
+			buildEnv: BUILD_ENV.SANDBOX, // or BUILD_ENV.PRODUCTION
+			enableLogging: true,
+			partnerId,
+		}),
+	];
+
+	return createConfig({
+		chains: [
+			/* your supported chains */
+		],
+		transports: {
+			// your chain transports
+		},
+		connectors,
+	});
 };
 ```
 
 ## AIR Credentials Stubbing Strategy
 
-**Option 1 - Full Stub:** If AIR Credential SDK is problematic:
+**Option 1 - Full AIR Integration:** Use AirService for credential management:
 
--   Create mock credential objects with { id, issuer, subject, signature }
--   Use standard wallet signatures for link signing
+-   Use wagmi + airkit-connector for wallet connection
+-   Access AirService through the connector for credential operations
+-   Partner ID is required for initialization
+-   Follow example patterns from airkit-example-main
+
+**Option 2 - Partial Integration:** If credential features are complex:
+
+-   Use wagmi + airkit-connector for wallet connection only
+-   Implement custom credential schema using wallet signatures
 -   Store credentials in localStorage
--   Implement verification using signature recovery
+-   Create simple verification API using signature recovery
 
-**Option 2 - Partial Integration:** If AIR Account SDK works but Credentials don't:
+**Option 3 - Full Stub:** Fallback if AIR SDK has issues:
 
--   Use AIR Account for wallet connection only
--   Implement custom credential schema
--   Use connected wallet for signing link data
--   Create simple verification API that checks signatures
+-   Mock the airConnector interface
+-   Use standard wallet connection libraries
+-   Implement simple signature-based verification
 
-**Fallback Timeline:** Allocate max 2 hours for AIR SDK integration before falling back to stub approach.
+**Critical Requirements:**
+
+-   Partner ID must be obtained for AIR SDK
+-   BuildEnv should be SANDBOX for development
+-   Follow wagmi patterns for React integration
+
+**Fallback Timeline:** Allocate max 2 hours for full AIR integration before falling back to partial approach.
 
 ## Mini README
 
@@ -248,4 +313,29 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
 
 ## Lessons
 
-_[Lessons learned during implementation will be documented here]_
+### From airkit-example-main Analysis:
+
+1. **Correct AIR SDK Dependencies:**
+
+    - Use `@mocanetwork/airkit-connector` not `@air/account-sdk`
+    - Requires `wagmi`, `viem`, and `@tanstack/react-query`
+    - Uses standard wagmi patterns for wallet connection
+
+2. **Partner ID Requirement:**
+
+    - AIR SDK requires a partner ID for initialization
+    - Need to obtain partner ID from MOCA Network
+    - Partner ID is passed to airConnector configuration
+
+3. **Configuration Pattern:**
+
+    - Use `BUILD_ENV.SANDBOX` for development
+    - airConnector integrates with wagmi's connector system
+    - Access AirService through connector.airService
+
+4. **Wallet Connection Flow:**
+    - Find connector with `connector?.isMocaNetwork` property
+    - Use standard wagmi useConnect hook
+    - Connection state managed through wagmi hooks
+
+_[Additional lessons learned during implementation will be documented here]_
