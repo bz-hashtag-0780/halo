@@ -106,9 +106,18 @@ export function WalletButton() {
 							</div>
 
 							<button
-								onClick={() => {
-									disconnect();
-									setShowDropdown(false);
+								onClick={async () => {
+									try {
+										await disconnect();
+										setShowDropdown(false);
+									} catch (error) {
+										console.error(
+											'Disconnect failed:',
+											error
+										);
+										// Still close dropdown even if disconnect fails
+										setShowDropdown(false);
+									}
 								}}
 								disabled={isDisconnecting}
 								className="w-full mt-4 py-2 px-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition duration-200"
