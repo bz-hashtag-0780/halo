@@ -42,16 +42,46 @@ export const useWalletConnection = () => {
 				(connector) => connector?.isMocaNetwork
 			) as AirConnector | undefined;
 
-			if (airConnector && airConnector.airService) {
+			if (airConnector?.airService) {
 				console.log('🧹 Cleaning up AIR service...');
 				try {
-					// Clean up AIR service if it exists
-					await airConnector.airService.logout();
-					airConnector.airService.cleanUp();
+					// Check if the airService has cleanup methods and is initialized
+					if (typeof airConnector.airService.logout === 'function') {
+						// Check if service is actually logged in before trying to logout
+						if (airConnector.airService.isLoggedIn) {
+							await airConnector.airService.logout();
+							console.log(
+								'✅ AIR service logged out successfully'
+							);
+						} else {
+							console.log(
+								'ℹ️ AIR service not logged in, skipping logout'
+							);
+						}
+					} else {
+						console.log(
+							'ℹ️ AIR service logout method not available'
+						);
+					}
+
+					// Clean up if method exists
+					if (typeof airConnector.airService.cleanUp === 'function') {
+						airConnector.airService.cleanUp();
+						console.log('✅ AIR service cleaned up successfully');
+					} else {
+						console.log(
+							'ℹ️ AIR service cleanUp method not available'
+						);
+					}
 				} catch (airError) {
-					console.warn('AIR service cleanup warning:', airError);
+					console.warn(
+						'⚠️ AIR service cleanup warning (non-critical):',
+						airError
+					);
 					// Don't throw here, continue with wagmi disconnect
 				}
+			} else {
+				console.log('ℹ️ No AIR service found to clean up');
 			}
 
 			// Perform wagmi disconnect
@@ -62,7 +92,12 @@ export const useWalletConnection = () => {
 		} catch (error) {
 			console.error('❌ Disconnect error:', error);
 			// Even if there's an error, try to force disconnect
-			wagmiDisconnect();
+			try {
+				wagmiDisconnect();
+				console.log('✅ Force disconnect completed');
+			} catch (forceError) {
+				console.error('❌ Force disconnect also failed:', forceError);
+			}
 		}
 	}, [config.connectors, wagmiDisconnect]);
 

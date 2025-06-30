@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useWalletConnection } from '../lib/airSdk';
 import { mocaChain } from '../lib/wagmiConfig';
 
 export function WalletConnect() {
+	const [isHydrated, setIsHydrated] = useState(false);
 	const {
 		connectWallet,
 		disconnect,
@@ -14,12 +16,50 @@ export function WalletConnect() {
 		chainId,
 	} = useWalletConnection();
 
+	// Fix hydration mismatch by ensuring client-side rendering
+	useEffect(() => {
+		setIsHydrated(true);
+	}, []);
+
 	const handleConnect = async () => {
 		const result = await connectWallet();
 		if (!result.success) {
 			alert(`Connection failed: ${result.error}`);
 		}
 	};
+
+	// Show basic connect form during SSR and before hydration
+	if (!isHydrated) {
+		return (
+			<div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+				<div className="p-6">
+					<h2 className="text-xl font-semibold text-gray-900 mb-4">
+						Connect Wallet
+					</h2>
+
+					<p className="text-gray-600 mb-6">
+						Connect to Moca Testnet using AIR SDK to create and
+						verify signed links.
+					</p>
+
+					<button
+						disabled
+						className="w-full py-3 bg-blue-600 opacity-50 cursor-not-allowed text-white font-medium rounded-lg"
+					>
+						Connect with AIR SDK
+					</button>
+
+					<div className="mt-4 text-xs text-gray-500">
+						<p>
+							This will connect to Moca Testnet (Chain ID:{' '}
+							{mocaChain.id})
+						</p>
+						<p>Partner ID: efaadeae-e2bb-4327-8ffe-e43933c3922a</p>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	if (isConnected) {
 		return (

@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWalletConnection, formatAddress } from '../../lib/airSdk';
 import { mocaChain } from '../../lib/wagmiConfig';
 
 export function WalletButton() {
 	const [showDropdown, setShowDropdown] = useState(false);
+	const [isHydrated, setIsHydrated] = useState(false);
 	const {
 		connectWallet,
 		disconnect,
@@ -16,12 +17,37 @@ export function WalletButton() {
 		chainId,
 	} = useWalletConnection();
 
+	// Fix hydration mismatch by ensuring client-side rendering
+	useEffect(() => {
+		setIsHydrated(true);
+	}, []);
+
 	const handleConnect = async () => {
 		const result = await connectWallet();
 		if (!result.success) {
 			alert(`Connection failed: ${result.error}`);
 		}
 	};
+
+	const handleDisconnect = async () => {
+		try {
+			await disconnect();
+			setShowDropdown(false);
+		} catch (error) {
+			console.error('Disconnect failed:', error);
+			// Still close dropdown even if disconnect fails
+			setShowDropdown(false);
+		}
+	};
+
+	// Show basic button during SSR and before hydration
+	if (!isHydrated) {
+		return (
+			<button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition duration-200">
+				Connect Wallet
+			</button>
+		);
+	}
 
 	if (isConnecting) {
 		return (
@@ -106,19 +132,7 @@ export function WalletButton() {
 							</div>
 
 							<button
-								onClick={async () => {
-									try {
-										await disconnect();
-										setShowDropdown(false);
-									} catch (error) {
-										console.error(
-											'Disconnect failed:',
-											error
-										);
-										// Still close dropdown even if disconnect fails
-										setShowDropdown(false);
-									}
-								}}
+								onClick={handleDisconnect}
 								disabled={isDisconnecting}
 								className="w-full mt-4 py-2 px-4 bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition duration-200"
 							>

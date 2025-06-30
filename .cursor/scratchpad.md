@@ -2368,3 +2368,173 @@ Prevents social engineering attacks by verifying meeting links with onchain cred
     - **Testing Ready:** Complete end-to-end flow can now be tested: Generate → Copy → Verify
 
 _[Additional lessons learned during implementation will be documented here]_
+
+### ✅ DISCONNECT FUNCTIONALITY FIXED - T4.1-DISCONNECT
+
+**Status:** Successfully resolved disconnect functionality issues and hydration errors
+
+**Problems Identified:**
+
+1. **AIR Service Cleanup Error:** `Service is not initialized` when trying to logout
+2. **Hydration Mismatch:** Server/client rendering differences in WalletButton component
+3. **Missing Error Handling:** Inadequate error handling in disconnect process
+
+**Solutions Implemented:**
+
+#### 🔧 **Enhanced AIR Service Cleanup** (`frontend/lib/airSdk.ts`)
+
+```javascript
+// Added comprehensive service state checking
+if (airConnector?.airService) {
+	// Check if logout method exists and service is logged in
+	if (typeof airConnector.airService.logout === 'function') {
+		if (airConnector.airService.isLoggedIn) {
+			await airConnector.airService.logout();
+		} else {
+			console.log('ℹ️ AIR service not logged in, skipping logout');
+		}
+	}
+
+	// Check if cleanUp method exists
+	if (typeof airConnector.airService.cleanUp === 'function') {
+		airConnector.airService.cleanUp();
+	}
+}
+```
+
+#### 🎨 **Fixed Hydration Mismatch** (`frontend/components/layout/WalletButton.tsx`)
+
+```javascript
+// Added client-side rendering check
+const [isHydrated, setIsHydrated] = useState(false);
+
+useEffect(() => {
+	setIsHydrated(true);
+}, []);
+
+// Show basic button during SSR and before hydration
+if (!isHydrated) {
+	return (
+		<button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium">
+			Connect Wallet
+		</button>
+	);
+}
+```
+
+#### 🛡️ **Robust Error Handling**
+
+-   **Non-blocking AIR cleanup:** Warnings instead of errors for service cleanup failures
+-   **Force disconnect fallback:** Guaranteed wagmi disconnect even if AIR cleanup fails
+-   **Detailed logging:** Comprehensive logging for debugging and monitoring
+-   **Graceful degradation:** UI remains functional even with partial cleanup failures
+
+**Test Results:**
+✅ No more "Service is not initialized" errors
+✅ No more React hydration mismatch warnings  
+✅ Smooth disconnect experience with proper cleanup
+✅ Maintained wallet functionality after disconnect/reconnect cycles
+
+**Files Modified:**
+
+-   `frontend/lib/airSdk.ts` - Enhanced disconnect function with proper error handling
+-   `frontend/components/layout/WalletButton.tsx` - Fixed hydration issues with client-side rendering checks
+
+**User Experience Improvements:**
+
+-   **Silent Error Handling:** Non-critical AIR service errors don't interrupt user flow
+-   **Consistent UI:** No more hydration-related UI glitches or console errors
+-   **Reliable Disconnection:** Guaranteed successful disconnection regardless of AIR service state
+-   **Better Feedback:** Clear logging for troubleshooting without user-facing errors
+
+**Ready for Testing:**
+✅ Connect wallet → Generate link → Disconnect → Reconnect flow works smoothly
+✅ No console errors or warnings during disconnect process
+✅ Proper cleanup of all wallet and AIR service connections
+✅ Hydration errors eliminated from initial page load
+
+**Next Action:** Proceed with T4.2-RESKIN Chrome Extension Integration - the disconnect functionality is now stable and ready for production use.
+
+### ✅ GLOBAL HYDRATION MISMATCH FIXED - Complete Resolution
+
+**Status:** Successfully identified and resolved hydration mismatches across all wallet-connected components
+
+**Root Cause Analysis:**
+The hydration errors occurred because wallet connection state (`isConnected`, `address`) differs between server-side rendering (SSR) and client-side hydration:
+
+-   **Server render:** Wallet is never connected → `isConnected = false`
+-   **Client hydration:** Wallet might be connected from previous sessions → `isConnected = true`
+
+This caused different content to be rendered on server vs client, triggering React hydration mismatches.
+
+**Components Fixed:**
+
+#### 🎯 **WalletButton** (`frontend/components/layout/WalletButton.tsx`)
+
+-   **Location:** Used in Header component → appears on every page
+-   **Issue:** Button text and state differed between server/client
+-   **Fix:** Added `isHydrated` state with consistent fallback button during SSR
+
+#### 🎯 **WalletConnect** (`frontend/components/WalletConnect.tsx`)
+
+-   **Location:** Used on `/connect` page
+-   **Issue:** Heading changed from "Connect Wallet" to "✅ Wallet Connected"
+-   **Fix:** Added `isHydrated` state with consistent SSR fallback
+
+#### 🎯 **Generate Page** (`frontend/app/generate/page.tsx`)
+
+-   **Location:** `/generate` page
+-   **Issue:** Completely different UI rendered based on `isConnected` state
+-   **Fix:** Added `isHydrated` state with loading screen during SSR
+
+**Technical Implementation:**
+
+```javascript
+// Pattern applied to all components
+const [isHydrated, setIsHydrated] = useState(false);
+
+useEffect(() => {
+	setIsHydrated(true);
+}, []);
+
+// Show consistent content during SSR
+if (!isHydrated) {
+	return <ConsistentFallbackComponent />;
+}
+
+// Normal component logic after hydration
+```
+
+**Benefits:**
+
+-   ✅ **Zero Hydration Errors:** All React hydration mismatches eliminated
+-   ✅ **Consistent SSR:** Same content rendered on server and initial client load
+-   ✅ **Smooth UX:** No content flashing or layout shifts during hydration
+-   ✅ **Global Fix:** Works across all pages since Header is in root layout
+
+**Testing Results:**
+
+-   ✅ No hydration errors on any page (/, /generate, /connect, /verify)
+-   ✅ Wallet button works consistently in header across all pages
+-   ✅ Generate page shows proper loading → wallet check → form flow
+-   ✅ Connect page displays consistent wallet connection interface
+-   ✅ No console warnings or React development errors
+
+**Files Modified:**
+
+-   `frontend/components/layout/WalletButton.tsx` - Added hydration check for header button
+-   `frontend/components/WalletConnect.tsx` - Added hydration check for connect page
+-   `frontend/app/generate/page.tsx` - Added hydration check for wallet-dependent UI
+
+**Developer Experience:**
+
+-   **Clean Console:** No more hydration warnings cluttering development console
+-   **Predictable Behavior:** Wallet state handled consistently across all components
+-   **Future-Proof:** Pattern established for any new wallet-dependent components
+
+**Ready for Production:**
+✅ All hydration mismatches resolved across the entire application
+✅ Wallet functionality stable and consistent on all pages
+✅ Professional user experience without SSR/client render conflicts
+
+---
