@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Halo Demo - Meeting Links Test Page</title>
+		<style>
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				line-height: 1.6;
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 20px;
+				background: #f5f5f5;
+			}
+
+			.demo-container {
+				background: white;
+				padding: 30px;
+				border-radius: 10px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+				margin-bottom: 30px;
+			}
+
+			.demo-title {
+				color: #1a73e8;
+				font-size: 24px;
+				margin-bottom: 20px;
+				border-bottom: 2px solid #e8f0fe;
+				padding-bottom: 10px;
+			}
+
+			.email-message {
+				border: 1px solid #e0e0e0;
+				border-radius: 8px;
+				padding: 20px;
+				margin: 15px 0;
+				background: #fafafa;
+			}
+
+			.message-header {
+				font-weight: bold;
+				color: #333;
+				margin-bottom: 10px;
+				padding-bottom: 8px;
+				border-bottom: 1px solid #e0e0e0;
+			}
+
+			.message-content {
+				line-height: 1.8;
+				color: #555;
+			}
+
+			.verified-link {
+				color: #1a73e8;
+				text-decoration: none;
+				font-weight: 500;
+			}
+
+			.unverified-link {
+				color: #d93025;
+				text-decoration: none;
+			}
+
+			.status-indicator {
+				padding: 4px 8px;
+				border-radius: 4px;
+				font-size: 12px;
+				font-weight: bold;
+				margin-left: 8px;
+			}
+
+			.verified {
+				background: #e8f5e8;
+				color: #137333;
+			}
+
+			.unverified {
+				background: #fce8e6;
+				color: #d93025;
+			}
+
+			.demo-note {
+				background: #fff3cd;
+				border: 1px solid #ffeaa7;
+				border-radius: 6px;
+				padding: 15px;
+				margin: 20px 0;
+				color: #856404;
+			}
+
+			.instructions {
+				background: #e3f2fd;
+				border-left: 4px solid #2196f3;
+				padding: 15px;
+				margin: 20px 0;
+			}
+
+			.discord-message {
+				background: #36393f;
+				color: #dcddde;
+				border-radius: 8px;
+				padding: 15px;
+				margin: 15px 0;
+				font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial,
+					sans-serif;
+			}
+
+			.discord-user {
+				color: #00b0f4;
+				font-weight: 600;
+				margin-bottom: 5px;
+			}
+
+			.meeting-link {
+				display: inline-block;
+				padding: 2px;
+				border-radius: 3px;
+				margin: 2px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="demo-container">
+			<h1 class="demo-title">🛡️ Halo Chrome Extension Demo</h1>
+
+			<div class="instructions">
+				<h3>📋 Demo Instructions</h3>
+				<p><strong>1. Install the Halo Chrome Extension</strong></p>
+				<p>
+					<strong
+						>2. The extension will automatically scan this page for
+						meeting links</strong
+					>
+				</p>
+				<p>
+					<strong
+						>3. Watch for trust badges next to each link:</strong
+					>
+				</p>
+				<ul>
+					<li>
+						✅ <span class="verified">VERIFIED</span> - Link is
+						cryptographically verified
+					</li>
+					<li>
+						❌ <span class="unverified">UNVERIFIED</span> - Link has
+						no verification proof
+					</li>
+					<li>
+						⚠️
+						<span
+							style="
+								background: #fff3cd;
+								color: #856404;
+								padding: 2px 6px;
+							"
+							>SUSPICIOUS</span
+						>
+						- Link may be malicious
+					</li>
+				</ul>
+			</div>
+
+			<div class="demo-note">
+				<strong>🎬 Demo Scenario:</strong> You're checking your emails
+				and messages. The Halo extension automatically protects you by
+				showing verification status for all meeting links.
+			</div>
+		</div>
+
+		<!-- Gmail-style messages -->
+		<div class="demo-container">
+			<h2 class="demo-title">📧 Gmail Messages</h2>
+
+			<div class="email-message">
+				<div class="message-header">
+					From: john.smith@company.com<br />
+					Subject: Weekly Team Meeting - VERIFIED SENDER
+				</div>
+				<div class="message-content">
+					Hi team,<br /><br />
+					Our weekly standup is scheduled for tomorrow at 2 PM. Please
+					join using this verified link:<br /><br />
+					<a
+						href="https://meet.google.com/abc-defg-hij?halo_proof=eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjoiVmVyaWZpYWJsZVByZXNlbnRhdGlvbiIsImhvbGRlciI6IjB4MTIzNGFiY2QiLCJ2ZXJpZmlhYmxlQ3JlZGVudGlhbCI6W3siQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiJ1cm46Y3JlZGVudGlhbDpkZW1vLTE3MDQwMzQyMjQ2NDAiLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiTWVldGluZ0xpbmtDcmVkZW50aWFsIl0sImlzc3VlciI6ImRpZDphaXIyOkVudGl0eUFnZW50U2NoZW1hOjB4YTdiYWY4ZTQyOGE3YjFhOGQ5YTMxODE5ZjBjOTQ3ZmFiNzVhOGRmZjJkMmNmNzhjNjE2Y2VjNGEyMGUzYzU1NyIsImlzc3VhbmNlRGF0ZSI6IjIwMjQtMTItMzFUMTY6Mzc6MDQuNjQwWiIsImNyZWRlbnRpYWxTdWJqZWN0Ijp7Im1lZXRpbmdfdXJsIjoiaHR0cHM6Ly9tZWV0Lmdvb2dsZS5jb20vYWJjLWRlZmctaGlqIiwiY3JlYXRvcl9hZGRyZXNzIjoiMHgxMjM0YWJjZCIsImNyZWF0ZWRfdGltZXN0YW1wIjoiMjAyNC0xMi0zMVQxNjozNzowNC42NDBaIiwicGxhdGZvcm0iOiJHb29nbGUgTWVldCIsInRydXN0X2xldmVsIjoidmVyaWZpZWQiLCJleHBpcmVzX2F0IjoiMjAyNS0wMS0zMFQxNjozNzowNC42NDBaIn19XSwicHJvb2YiOnsidHlwZSI6IkVjZHNhU2VjcDI1NmsxU2lnbmF0dXJlMjAxOSIsImNyZWF0ZWQiOiIyMDI0LTEyLTMxVDE2OjM3OjA0LjY0MFoiLCJwcm9vZlB1cnBvc2UiOiJhdXRoZW50aWNhdGlvbiIsInZlcmlmaWNhdGlvbk1ldGhvZCI6IjB4MTIzNGFiY2Qja2V5LTEiLCJqd3MiOiJkZW1vLXByb29mLTE3MDQwMzQyMjQ2NDAtN3J4azl0In19"
+						class="verified-link meeting-link"
+					>
+						📹 Join Google Meet - Weekly Standup </a
+					><span class="status-indicator verified">✅ VERIFIED</span
+					><br /><br />
+					Looking forward to seeing everyone!<br /><br />
+					Best regards,<br />
+					John
+				</div>
+			</div>
+
+			<div class="email-message">
+				<div class="message-header">
+					From: suspicious.sender@fake-domain.com<br />
+					Subject: URGENT: Emergency Meeting - UNVERIFIED SENDER
+				</div>
+				<div class="message-content">
+					URGENT: There's been a security breach. Join this emergency
+					meeting immediately:<br /><br />
+					<a
+						href="https://zoom.us/j/123456789"
+						class="unverified-link meeting-link"
+					>
+						📹 Join Emergency Security Meeting </a
+					><span class="status-indicator unverified"
+						>❌ UNVERIFIED</span
+					><br /><br />
+					<strong style="color: #d93025"
+						>⚠️ This link has no verification proof and may be
+						malicious!</strong
+					>
+				</div>
+			</div>
+
+			<div class="email-message">
+				<div class="message-header">
+					From: hr@company.com<br />
+					Subject: Monthly All-Hands Meeting - VERIFIED SENDER
+				</div>
+				<div class="message-content">
+					The monthly all-hands meeting is scheduled for Friday at 3
+					PM:<br /><br />
+					<a
+						href="https://teams.microsoft.com/l/meetup-join/abc123?halo_proof=eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjoiVmVyaWZpYWJsZVByZXNlbnRhdGlvbiIsImhvbGRlciI6IjB4NTY3OGVmZ2giLCJ2ZXJpZmlhYmxlQ3JlZGVudGlhbCI6W3siQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiJ1cm46Y3JlZGVudGlhbDpkZW1vLTE3MDQwMzQyMjQ2NDEiLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiTWVldGluZ0xpbmtDcmVkZW50aWFsIl0sImlzc3VlciI6ImRpZDphYWlyMjpFbnRpdHlBZ2VudFNjaGVtYToweDU2NzhlZmdoIiwiaXNzdWFuY2VEYXRlIjoiMjAyNC0xMi0zMVQxNjozNzowNC42NDFaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsibWVldGluZ191cmwiOiJodHRwczovL3RlYW1zLm1pY3Jvc29mdC5jb20vbC9tZWV0dXAtam9pbi9hYmMxMjMiLCJjcmVhdG9yX2FkZHJlc3MiOiIweDU2NzhlZmdoIiwiY3JlYXRlZF90aW1lc3RhbXAiOiIyMDI0LTEyLTMxVDE2OjM3OjA0LjY0MVoiLCJwbGF0Zm9ybSI6Ik1pY3Jvc29mdCBUZWFtcyIsInRydXN0X2xldmVsIjoidmVyaWZpZWQiLCJleHBpcmVzX2F0IjoiMjAyNS0wMS0zMFQxNjozNzowNC42NDFaIn19XSwicHJvb2YiOnsidHlwZSI6IkVjZHNhU2VjcDI1NmsxU2lnbmF0dXJlMjAxOSIsImNyZWF0ZWQiOiIyMDI0LTEyLTMxVDE2OjM3OjA0LjY0MVoiLCJwcm9vZlB1cnBvc2UiOiJhdXRoZW50aWNhdGlvbiIsInZlcmlmaWNhdGlvbk1ldGhvZCI6IjB4NTY3OGVmZ2gja2V5LTEiLCJqd3MiOiJkZW1vLXByb29mLTE3MDQwMzQyMjQ2NDEtOGF4azl1In19"
+						class="verified-link meeting-link"
+					>
+						👥 Join Microsoft Teams - All Hands </a
+					><span class="status-indicator verified">✅ VERIFIED</span
+					><br /><br />
+					Agenda will be shared tomorrow.
+				</div>
+			</div>
+		</div>
+
+		<!-- Discord-style messages -->
+		<div class="demo-container">
+			<h2 class="demo-title">🎮 Discord Messages</h2>
+
+			<div class="discord-message">
+				<div class="discord-user">@TeamLead</div>
+				<div>
+					Let's hop on voice chat for the code review:<br />
+					<a
+						href="https://discord.gg/abcd1234?halo_proof=eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjoiVmVyaWZpYWJsZVByZXNlbnRhdGlvbiIsImhvbGRlciI6IjB4OTEyM2lqa2wiLCJ2ZXJpZmlhYmxlQ3JlZGVudGlhbCI6W3siQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwiaWQiOiJ1cm46Y3JlZGVudGlhbDpkZW1vLTE3MDQwMzQyMjQ2NDIiLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiTWVldGluZ0xpbmtDcmVkZW50aWFsIl0sImlzc3VlciI6ImRpZDphYWlyMjpFbnRpdHlBZ2VudFNjaGVtYToweDkxMjNpamtsIiwiaXNzdWFuY2VEYXRlIjoiMjAyNC0xMi0zMVQxNjozNzowNC42NDJaIiwiY3JlZGVudGlhbFN1YmplY3QiOnsibWVldGluZ191cmwiOiJodHRwczovL2Rpc2NvcmQuZ2cvYWJjZDEyMzQiLCJjcmVhdG9yX2FkZHJlc3MiOiIweDkxMjNpamtsIiwiY3JlYXRlZF90aW1lc3RhbXAiOiIyMDI0LTEyLTMxVDE2OjM3OjA0LjY0MloiLCJwbGF0Zm9ybSI6IkRpc2NvcmQiLCJ0cnVzdF9sZXZlbCI6InZlcmlmaWVkIiwiZXhwaXJlc19hdCI6IjIwMjUtMDEtMzBUMTY6Mzc6MDQuNjQyWiJ9fV0sInByb29mIjp7InR5cGUiOiJFY2RzYVNlY3AyNTZrMVNpZ25hdHVyZTIwMTkiLCJjcmVhdGVkIjoiMjAyNC0xMi0zMVQxNjozNzowNC42NDJaIiwicHJvb2ZQdXJwb3NlIjoiYXV0aGVudGljYXRpb24iLCJ2ZXJpZmljYXRpb25NZXRob2QiOiIweDkxMjNpamtsI2tleS0xIiwiandEiOiJkZW1vLXByb29mLTE3MDQwMzQyMjQ2NDItOWJ4azl2In19"
+						class="verified-link meeting-link"
+					>
+						🎮 Discord Voice Channel </a
+					><span class="status-indicator verified">✅ VERIFIED</span>
+				</div>
+			</div>
+
+			<div class="discord-message">
+				<div class="discord-user">@SuspiciousUser</div>
+				<div>
+					Free CS:GO skins! Join this server now:<br />
+					<a
+						href="https://discord.gg/fake-server"
+						class="unverified-link meeting-link"
+					>
+						🎮 Join for Free Skins!!! </a
+					><span class="status-indicator unverified"
+						>❌ UNVERIFIED</span
+					><br />
+					<strong style="color: #f04747"
+						>⚠️ This Discord invite has no verification and may be a
+						scam!</strong
+					>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-container">
+			<h2 class="demo-title">🎯 Demo Results</h2>
+			<div class="demo-note">
+				<strong>Expected Behavior:</strong><br />
+				• ✅ Verified links show green trust badges with creator
+				details<br />
+				• ❌ Unverified links show red warning badges<br />
+				• Click any badge to see detailed verification information<br />
+				• The extension prevents accidental clicks on suspicious links
+			</div>
+
+			<div class="instructions">
+				<h3>🔧 Testing the Extension</h3>
+				<p>
+					1. <strong>Load the Extension:</strong> Go to
+					chrome://extensions/ → Enable Developer Mode → Load Unpacked
+					→ Select the chrome-extension folder
+				</p>
+				<p>
+					2. <strong>Reload this Page:</strong> The extension should
+					automatically scan and add trust badges
+				</p>
+				<p>
+					3. <strong>Check the Popup:</strong> Click the Halo
+					extension icon to see statistics and settings
+				</p>
+				<p>
+					4. <strong>Test Verification:</strong> Click on trust badges
+					to see detailed verification information
+				</p>
+			</div>
+		</div>
+	</body>
+</html>

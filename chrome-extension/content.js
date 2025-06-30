@@ -490,14 +490,14 @@ async function processMeetingLink(linkData) {
 // Add loading badge
 function addLoadingBadge(linkData) {
 	const badge = document.createElement('span');
-	badge.className = 'halo-trust-badge halo-loading';
-	badge.innerHTML = '🛡️ ⏳';
-	badge.title = 'Halo: Verifying link...';
+	badge.className = 'halo-trust-badge loading';
+	badge.innerHTML = 'VERIFYING';
+	badge.title = 'Halo: Verifying meeting link...';
 	badge.style.cssText = `
 		display: inline-block;
-		margin-left: 4px;
-		font-size: 12px;
-		padding: 2px 4px;
+		margin-left: 6px;
+		font-size: 11px;
+		padding: 4px 8px;
 		border-radius: 3px;
 		background: rgba(59, 130, 246, 0.1);
 		border: 1px solid #3b82f6;
@@ -560,56 +560,31 @@ function positionBadge(linkData, badge) {
 // Enhanced trust badge creation
 function addEnhancedTrustBadge(linkData, verification) {
 	const badge = document.createElement('span');
-	badge.className = 'halo-trust-badge halo-enhanced';
 
-	// Enhanced badge content with platform info
-	let badgeIcon, badgeColor, badgeTitle;
+	// Enhanced badge content with maximum impact
+	let badgeText, badgeClass, badgeTitle;
 
 	if (verification.verified) {
-		badgeIcon = `${linkData.icon} ✅`;
-		badgeColor = '#10B981';
-		badgeTitle = `Verified ${linkData.platformName} link - Trust Level: ${verification.trustLevel}`;
+		badgeText = 'VERIFIED';
+		badgeClass = 'halo-trust-badge verified';
+		badgeTitle = `✅ VERIFIED ${linkData.platformName} link - Creator: ${
+			verification.creatorAddress || 'Unknown'
+		} - Trust Level: ${verification.trustLevel}`;
 	} else if (verification.trustLevel === 'unverified') {
-		badgeIcon = `${linkData.icon} ⚠️`;
-		badgeColor = '#F59E0B';
-		badgeTitle = `Unverified ${linkData.platformName} link - No Halo credential found`;
+		badgeText = 'UNVERIFIED';
+		badgeClass = 'halo-trust-badge unverified';
+		badgeTitle = `❌ UNVERIFIED ${linkData.platformName} link - No Halo credential found. This link may be malicious!`;
 	} else {
-		badgeIcon = `${linkData.icon} ❌`;
-		badgeColor = '#EF4444';
-		badgeTitle = `${linkData.platformName} verification failed: ${verification.reason}`;
+		badgeText = 'ERROR';
+		badgeClass = 'halo-trust-badge error';
+		badgeTitle = `⚠️ ${linkData.platformName} verification failed: ${verification.reason}`;
 	}
 
-	badge.innerHTML = badgeIcon;
+	badge.className = badgeClass;
+	badge.innerHTML = badgeText;
 	badge.title = badgeTitle;
 
-	// Enhanced styling
-	badge.style.cssText = `
-		display: inline-block;
-		margin-left: 4px;
-		font-size: 12px;
-		font-weight: 600;
-		padding: 2px 6px;
-		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.95);
-		border: 1px solid ${badgeColor};
-		color: ${badgeColor};
-		cursor: help;
-		z-index: 10000;
-		position: relative;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		transition: all 0.2s ease;
-	`;
-
-	// Hover effects
-	badge.addEventListener('mouseenter', () => {
-		badge.style.transform = 'scale(1.05)';
-		badge.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.15)';
-	});
-
-	badge.addEventListener('mouseleave', () => {
-		badge.style.transform = 'scale(1)';
-		badge.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-	});
+	// Click handler for detailed verification info
 
 	// Enhanced click handler
 	badge.addEventListener('click', (e) => {
