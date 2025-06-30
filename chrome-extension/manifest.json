@@ -12,6 +12,8 @@
 		"https://web.whatsapp.com/*",
 		"https://teams.microsoft.com/*",
 		"https://slack.com/*",
+		"https://twitter.com/*",
+		"https://x.com/*",
 		"https://air.api.sandbox.air3.com/*",
 		"https://credential.api.sandbox.air3.com/*",
 		"http://localhost:3000/*"
@@ -29,7 +31,9 @@
 				"https://discord.com/*",
 				"https://web.whatsapp.com/*",
 				"https://teams.microsoft.com/*",
-				"https://slack.com/*"
+				"https://slack.com/*",
+				"https://twitter.com/*",
+				"https://x.com/*"
 			],
 			"js": ["content.js"],
 			"css": ["content.css"],

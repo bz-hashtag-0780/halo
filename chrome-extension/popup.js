@@ -167,6 +167,12 @@ async function loadSettings() {
 			document.getElementById('showBadgesToggle').checked =
 				settings.show_badges || false;
 
+			// Update demo mode toggle
+			const demoModeToggle = document.getElementById('demoModeToggle');
+			if (demoModeToggle) {
+				demoModeToggle.checked = settings.demo_mode || false;
+			}
+
 			// Update advanced settings if they exist
 			if (settings.cache_enabled !== undefined) {
 				const cacheToggle = document.getElementById('cacheToggle');
@@ -405,6 +411,20 @@ function setupEventListeners() {
 		.addEventListener('change', async (e) => {
 			await updateSetting('show_badges', e.target.checked);
 		});
+
+	// Demo Mode toggle - for presentation demos
+	const demoModeToggle = document.getElementById('demoModeToggle');
+	if (demoModeToggle) {
+		demoModeToggle.addEventListener('change', async (e) => {
+			await updateSetting('demo_mode', e.target.checked);
+			showNotification(
+				e.target.checked
+					? '🎬 Demo Mode Enabled - Meeting links will show verification badges for presentation'
+					: '🎬 Demo Mode Disabled - Normal verification mode',
+				'info'
+			);
+		});
+	}
 
 	// Advanced toggles (T3.2)
 	const cacheToggle = document.getElementById('cacheToggle');

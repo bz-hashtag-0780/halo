@@ -818,6 +818,50 @@ input:checked + .setting-slider:before {
 	}
 }
 
+/* Demo Mode Special Styling */
+.setting-item.demo-mode {
+	background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+	border-radius: 8px !important;
+	padding: 12px !important;
+	margin: 8px 0 !important;
+	border: 2px solid #6366f1 !important;
+	box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+	animation: demoGlow 2s ease-in-out infinite alternate !important;
+}
+
+@keyframes demoGlow {
+	0% {
+		box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+	}
+	100% {
+		box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+	}
+}
+
+.setting-item.demo-mode .setting-info {
+	color: white !important;
+}
+
+.setting-item.demo-mode .setting-label {
+	color: white !important;
+	font-weight: 600 !important;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.setting-item.demo-mode .setting-description {
+	color: rgba(255, 255, 255, 0.9) !important;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.setting-item.demo-mode .setting-toggle .setting-slider {
+	background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.setting-item.demo-mode .setting-toggle input:checked + .setting-slider {
+	background-color: #22c55e !important;
+	box-shadow: 0 0 8px rgba(34, 197, 94, 0.6) !important;
+}
+
 /* Responsive adjustments */
 @media (max-height: 600px) {
 	body {

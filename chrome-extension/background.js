@@ -31,6 +31,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 		halo_enabled: true,
 		auto_scan: true,
 		show_badges: true,
+		demo_mode: false, // Demo mode for presentations
 		verification_endpoint: CONFIG.CREDENTIAL_API_BASE,
 		cache_enabled: true,
 		cache_ttl: CONFIG.CACHE_TTL,
@@ -678,6 +679,7 @@ async function getExtensionSettings(sendResponse) {
 			'halo_enabled',
 			'auto_scan',
 			'show_badges',
+			'demo_mode',
 			'verification_endpoint',
 			'cache_enabled',
 			'cache_ttl',

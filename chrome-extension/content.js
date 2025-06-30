@@ -92,6 +92,17 @@ const CONFIG = {
 			excludeSelectors: ['.c-message--light'],
 			throttle: 100,
 		},
+		twitter: {
+			containers: [
+				'[data-testid="messageEntry"]',
+				'[data-testid="cellInnerDiv"]',
+				'[role="group"]',
+				'.r-1d2f490',
+				'[data-testid="tweetText"]',
+			],
+			excludeSelectors: ['.r-1blvdjr', '[data-testid="socialContext"]'],
+			throttle: 150,
+		},
 	},
 };
 
@@ -175,6 +186,8 @@ function detectCurrentPlatform() {
 	if (hostname.includes('teams.microsoft.com')) return 'teams';
 	if (hostname.includes('slack.com')) return 'slack';
 	if (hostname.includes('web.whatsapp.com')) return 'whatsapp';
+	if (hostname.includes('twitter.com') || hostname.includes('x.com'))
+		return 'twitter';
 
 	return 'generic';
 }
@@ -260,10 +273,12 @@ function scanForMeetingLinks() {
 
 	isScanning = true;
 	console.log('🔍 Enhanced scanning for meeting links...');
+	console.log(`📍 Current platform: ${detectCurrentPlatform()}`);
 
 	const startTime = performance.now();
 	const links = [];
 	const platformConfig = getPlatformConfig();
+	console.log('🔧 Platform config:', platformConfig);
 
 	try {
 		// Use platform-specific containers for better performance
@@ -417,7 +432,7 @@ async function processMeetingLinksBatch(links) {
 	}
 }
 
-// Enhanced meeting link processing
+// Enhanced meeting link processing with demo mode support
 async function processMeetingLink(linkData) {
 	try {
 		// Skip if already processed
@@ -433,6 +448,20 @@ async function processMeetingLink(linkData) {
 			linkData.url
 		);
 
+		// Check if demo mode is enabled
+		const isDemoMode = await checkDemoMode();
+
+		if (isDemoMode) {
+			// Demo mode: automatically generate verification badges
+			console.log(
+				'🎬 Demo mode active - generating demo verification badge'
+			);
+			const demoVerification = generateDemoVerification(linkData);
+			addEnhancedTrustBadge(linkData, demoVerification);
+			return;
+		}
+
+		// Normal mode: proceed with actual verification
 		// Check cache first
 		if (verificationCache.has(linkData.url)) {
 			const cachedResult = verificationCache.get(linkData.url);
@@ -936,6 +965,55 @@ function setupEnhancedMutationObserver() {
 	);
 }
 
+// Check if demo mode is enabled
+async function checkDemoMode() {
+	return new Promise((resolve) => {
+		chrome.runtime.sendMessage(
+			{
+				type: 'GET_SETTINGS',
+			},
+			(response) => {
+				if (
+					chrome.runtime.lastError ||
+					!response ||
+					!response.success
+				) {
+					resolve(false);
+				} else {
+					resolve(response.settings.demo_mode || false);
+				}
+			}
+		);
+	});
+}
+
+// Generate demo verification result for presentation
+function generateDemoVerification(linkData) {
+	// Create realistic demo verification results
+	// 70% chance of verified, 30% chance of unverified for demo variety
+	const isVerified = Math.random() > 0.3;
+
+	if (isVerified) {
+		return {
+			verified: true,
+			trustLevel: 'verified',
+			creatorAddress: '0x' + Math.random().toString(16).substr(2, 40),
+			platform: linkData.platform,
+			timestamp: new Date().toISOString(),
+			reason: 'Demo verification successful',
+			demoMode: true,
+		};
+	} else {
+		return {
+			verified: false,
+			trustLevel: 'unverified',
+			platform: linkData.platform,
+			reason: 'No Halo credential found (Demo)',
+			demoMode: true,
+		};
+	}
+}
+
 // Enhanced verification function with better error handling
 function verifyMeetingLink(url) {
 	return new Promise((resolve) => {
@@ -982,12 +1060,32 @@ function verifyMeetingLink(url) {
 // Enhanced initialization
 function initializeEnhancedHaloScanner() {
 	console.log('🔍 Initializing Enhanced Halo Scanner v1.1.0...');
+	console.log(`🌐 Current URL: ${window.location.href}`);
 
 	const platform = detectCurrentPlatform();
 	console.log(`📍 Detected platform: ${platform}`);
 
+	// Check demo mode status immediately
+	checkDemoMode()
+		.then((isDemoMode) => {
+			console.log(
+				`🎬 Demo mode status: ${
+					isDemoMode ? 'ENABLED ✅' : 'DISABLED ❌'
+				}`
+			);
+			if (isDemoMode) {
+				console.log(
+					'🎯 Demo mode is active - badges will be generated automatically for meeting links'
+				);
+			}
+		})
+		.catch((error) => {
+			console.error('❌ Error checking demo mode:', error);
+		});
+
 	// Initial scan with delay to ensure DOM is ready
 	setTimeout(() => {
+		console.log('🔍 Starting initial scan for meeting links...');
 		scanForMeetingLinks();
 	}, 500);
 

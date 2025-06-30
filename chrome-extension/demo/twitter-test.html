@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Twitter DM Demo - Halo Extension Test</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+					Roboto, sans-serif;
+				margin: 0;
+				padding: 20px;
+				background: #15202b;
+				color: #ffffff;
+				line-height: 1.4;
+			}
+
+			.demo-header {
+				background: #1da1f2;
+				color: white;
+				padding: 20px;
+				border-radius: 8px;
+				margin-bottom: 20px;
+				text-align: center;
+			}
+
+			.twitter-container {
+				max-width: 600px;
+				margin: 0 auto;
+				background: #192734;
+				border-radius: 16px;
+				overflow: hidden;
+				box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+			}
+
+			.twitter-header {
+				background: #15202b;
+				padding: 16px 20px;
+				border-bottom: 1px solid #38444d;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.twitter-back {
+				font-size: 20px;
+				cursor: pointer;
+			}
+
+			.twitter-title {
+				font-size: 20px;
+				font-weight: 700;
+			}
+
+			.twitter-messages {
+				padding: 20px;
+				min-height: 400px;
+			}
+
+			.message {
+				margin-bottom: 20px;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.message.sent {
+				align-items: flex-end;
+			}
+
+			.message.received {
+				align-items: flex-start;
+			}
+
+			.message-bubble {
+				max-width: 70%;
+				padding: 12px 16px;
+				border-radius: 20px;
+				word-wrap: break-word;
+			}
+
+			.message.sent .message-bubble {
+				background: #1da1f2;
+				color: white;
+			}
+
+			.message.received .message-bubble {
+				background: #38444d;
+				color: #ffffff;
+			}
+
+			.message-time {
+				font-size: 12px;
+				color: #8b98a5;
+				margin-top: 4px;
+				margin-bottom: 8px;
+			}
+
+			.meeting-link {
+				color: #1da1f2;
+				text-decoration: none;
+				font-weight: 500;
+				display: inline-block;
+				margin: 4px 0;
+			}
+
+			.meeting-link:hover {
+				text-decoration: underline;
+			}
+
+			.sender-name {
+				font-size: 12px;
+				color: #8b98a5;
+				margin-bottom: 4px;
+				font-weight: 500;
+			}
+
+			.instructions {
+				background: #1a2635;
+				border: 1px solid #38444d;
+				border-radius: 8px;
+				padding: 16px;
+				margin-bottom: 20px;
+			}
+
+			.demo-step {
+				background: #0f1419;
+				border-left: 4px solid #1da1f2;
+				padding: 12px 16px;
+				margin: 12px 0;
+				border-radius: 0 4px 4px 0;
+			}
+
+			.step-number {
+				background: #1da1f2;
+				color: white;
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				font-weight: 700;
+				margin-right: 8px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="demo-header">
+			<h1>🎬 Halo Demo Mode Test</h1>
+			<p>
+				This page simulates Twitter DMs with meeting links to test the
+				Halo extension's demo mode functionality.
+			</p>
+		</div>
+
+		<div class="instructions">
+			<h3>📋 Demo Instructions</h3>
+			<div class="demo-step">
+				<span class="step-number">1</span>
+				<strong>Load the Halo Chrome Extension</strong> and ensure it's
+				enabled
+			</div>
+			<div class="demo-step">
+				<span class="step-number">2</span>
+				<strong>Enable Demo Mode</strong> in extension settings (click
+				Halo icon → Settings → Demo Mode toggle)
+			</div>
+			<div class="demo-step">
+				<span class="step-number">3</span>
+				<strong>Reload this page</strong> to see automatic verification
+				badges appear next to meeting links
+			</div>
+			<div class="demo-step">
+				<span class="step-number">4</span>
+				<strong>Observe the badges:</strong> Green "VERIFIED" and Red
+				"UNVERIFIED" badges will appear automatically
+			</div>
+		</div>
+
+		<div class="twitter-container">
+			<div class="twitter-header">
+				<span class="twitter-back">←</span>
+				<span class="twitter-title">Messages with @teammate</span>
+			</div>
+
+			<div class="twitter-messages">
+				<!-- Received message with meeting link -->
+				<div class="message received">
+					<div class="sender-name">@teammate</div>
+					<div class="message-bubble">
+						Hey! Let's have our weekly sync meeting tomorrow. Join
+						here:<br />
+						<a
+							href="https://meet.google.com/abc-defg-hij"
+							class="meeting-link"
+						>
+							📹 Google Meet - Weekly Sync
+						</a>
+					</div>
+					<div class="message-time">2:30 PM</div>
+				</div>
+
+				<!-- Sent message -->
+				<div class="message sent">
+					<div class="message-bubble">
+						Sounds good! I'll be there 👍
+					</div>
+					<div class="message-time">2:32 PM</div>
+				</div>
+
+				<!-- Suspicious message -->
+				<div class="message received">
+					<div class="sender-name">@suspicious_user</div>
+					<div class="message-bubble">
+						URGENT: Security breach detected! Join emergency meeting
+						immediately:<br />
+						<a
+							href="https://zoom.us/j/123456789"
+							class="meeting-link"
+						>
+							🚨 Emergency Security Meeting </a
+						><br />
+						<small style="color: #ff6b6b"
+							>⚠️ This could be a phishing attempt!</small
+						>
+					</div>
+					<div class="message-time">3:15 PM</div>
+				</div>
+
+				<!-- Another legitimate message -->
+				<div class="message received">
+					<div class="sender-name">@hr_manager</div>
+					<div class="message-bubble">
+						Monthly all-hands meeting scheduled for Friday:<br />
+						<a
+							href="https://teams.microsoft.com/l/meetup-join/xyz789"
+							class="meeting-link"
+						>
+							👥 All Hands Meeting - Q4 Review
+						</a>
+					</div>
+					<div class="message-time">4:20 PM</div>
+				</div>
+
+				<!-- Discord link -->
+				<div class="message received">
+					<div class="sender-name">@dev_lead</div>
+					<div class="message-bubble">
+						Code review session in our Discord:<br />
+						<a
+							href="https://discord.gg/abc123def"
+							class="meeting-link"
+						>
+							🎮 Discord - Code Review Channel
+						</a>
+					</div>
+					<div class="message-time">5:45 PM</div>
+				</div>
+
+				<!-- Webex link -->
+				<div class="message received">
+					<div class="sender-name">@client_manager</div>
+					<div class="message-bubble">
+						Client presentation tomorrow on Webex:<br />
+						<a
+							href="https://company.webex.com/meet/presentation123"
+							class="meeting-link"
+						>
+							📞 Webex - Client Presentation
+						</a>
+					</div>
+					<div class="message-time">6:10 PM</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="instructions" style="margin-top: 20px">
+			<h3>🎯 Expected Results with Demo Mode</h3>
+			<p>
+				<strong>✅ Green "VERIFIED" badges</strong> should appear next
+				to legitimate meeting links (about 70% of links)
+			</p>
+			<p>
+				<strong>❌ Red "UNVERIFIED" badges</strong> should appear next
+				to suspicious/unknown links (about 30% of links)
+			</p>
+			<p>
+				<strong>🎬 Demo Note:</strong> These badges are generated
+				automatically for presentation purposes when demo mode is
+				enabled.
+			</p>
+
+			<h3>🔧 Troubleshooting</h3>
+			<p><strong>No badges appearing?</strong></p>
+			<ul>
+				<li>Check that Halo extension is loaded and enabled</li>
+				<li>Ensure Demo Mode is toggled ON in extension settings</li>
+				<li>Try reloading this page</li>
+				<li>Check browser console for any errors (F12)</li>
+			</ul>
+
+			<h3>🚀 For Live Demo</h3>
+			<p>
+				This works on real Twitter DMs too! Just enable Demo Mode and
+				visit twitter.com/messages - any meeting links in conversations
+				will automatically show verification badges.
+			</p>
+		</div>
+	</body>
+</html>
