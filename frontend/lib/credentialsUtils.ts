@@ -142,23 +142,11 @@ export const getVerifierAuthToken = async (): Promise<string | null> => {
 	}
 };
 
-// Add unique ID generation utility
-const generateUniqueId = (): string => {
-	// Generate a unique ID using timestamp + random string
-	const timestamp = Date.now().toString(36);
-	const randomStr = Math.random().toString(36).substring(2, 8);
-	return `halo-cred-${timestamp}-${randomStr}`;
-};
-
-// Meeting link credential subject interface (WITH id field for uniqueness)
+// Meeting link credential subject interface (minimal to match working examples)
 export interface MeetingLinkCredentialSubject {
-	id: string; // Unique identifier for this credential instance
-	meeting_url: string;
-	creator_address: string;
-	created_timestamp: string;
-	platform: string;
-	trust_level: string;
-	expires_at: string;
+	meeting_url: string; // Primary field
+	creator_address: string; // Who created it
+	created_timestamp: string; // When created
 }
 
 // Verifiable presentation result interface
@@ -191,23 +179,16 @@ export const detectPlatform = (url: string): string => {
 	return 'Unknown';
 };
 
-// Generate credential subject for meeting link (WITH unique id field)
+// Generate credential subject for meeting link (minimal version)
 export const generateMeetingLinkCredential = (
 	meetingUrl: string,
-	creatorAddress: string,
-	trustLevel: string = 'verified'
+	creatorAddress: string
 ): MeetingLinkCredentialSubject => {
-	const now = new Date();
-	const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-
+	// Minimal credential subject - only essential fields
 	return {
-		id: generateUniqueId(), // Generate unique ID for this credential instance
 		meeting_url: meetingUrl,
 		creator_address: creatorAddress,
-		created_timestamp: now.toISOString(),
-		platform: detectPlatform(meetingUrl),
-		trust_level: trustLevel,
-		expires_at: expiresAt.toISOString(),
+		created_timestamp: new Date().toISOString(),
 	};
 };
 
@@ -340,10 +321,10 @@ export const useCredentialIssuance = () => {
 				creatorAddress
 			);
 
-			console.log('🐛 Generated credentialSubject with unique ID:', {
-				id: credentialSubject.id,
+			console.log('🐛 Generated credentialSubject with minimal fields:', {
 				meeting_url: credentialSubject.meeting_url,
-				platform: credentialSubject.platform,
+				creator_address: credentialSubject.creator_address,
+				created_timestamp: credentialSubject.created_timestamp,
 				fullSubject: credentialSubject,
 			});
 
@@ -382,13 +363,13 @@ export const useCredentialIssuance = () => {
 				PARTNER_ID!,
 				{
 					endpoint: rp?.urlWithToken,
-					airKitBuildEnv: BUILD_ENV_VALUE || BUILD_ENV.STAGING,
+					airKitBuildEnv: BUILD_ENV_VALUE || BUILD_ENV.SANDBOX,
 					theme: 'light', // currently only have light theme
 					locale: LOCALE as Language,
 				}
 			);
 
-			// Set up event listeners
+			// Set up comprehensive event listeners
 			widgetRef.current.on('issueCompleted', async () => {
 				console.log('🐛 Credential issuance completed successfully!');
 
@@ -399,13 +380,13 @@ export const useCredentialIssuance = () => {
 					if (onPresentationGenerated) {
 						console.log('🐛 Generating presentation...');
 
-						// Create a proper credential object with unique ID and proper structure
+						// Create a proper credential object with minimal structure
 						// In a real scenario, we'd get this from the AIR service
 						const mockCredential = {
 							'@context': [
 								'https://www.w3.org/2018/credentials/v1',
 							],
-							id: `urn:credential:${credentialSubject.id}`,
+							id: `urn:credential:${Date.now()}`,
 							type: [
 								'VerifiableCredential',
 								'MeetingLinkCredential',
@@ -459,7 +440,22 @@ export const useCredentialIssuance = () => {
 
 			widgetRef.current.on('close', () => {
 				setIsLoading(false);
-				console.log('Widget closed');
+				console.log('🐛 Widget closed by user');
+			});
+
+			console.log('🐛 Widget created successfully, about to launch...');
+			console.log('🐛 Widget config:', {
+				endpoint: rp?.urlWithToken?.substring(0, 100) + '...',
+				partnerId: PARTNER_ID,
+				buildEnv: BUILD_ENV_VALUE,
+				claimRequest: {
+					process: claimRequest.process,
+					issuerDid: claimRequest.issuerDid,
+					credentialId: claimRequest.credentialId,
+					credentialSubjectKeys: Object.keys(
+						claimRequest.credentialSubject
+					),
+				},
 			});
 		} catch (err) {
 			setError(
