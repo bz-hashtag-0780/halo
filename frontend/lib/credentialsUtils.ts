@@ -615,7 +615,7 @@ export const useCredentialIssuance = () => {
 						);
 						onPresentationGenerated(demoResult);
 					}
-				}, 5000); // 5 second delay
+				}, 10000); // 10 second delay
 			}
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'An error occurred');
