@@ -25,6 +25,50 @@
 -   AIR Credentials Dashboard (schema & credential management)
 -   Chrome Extension Manifest V3 (link scanning & credential verification)
 
+## Updated Background and Motivation
+
+**Current State Assessment:**
+
+-   ✅ AIR wallet connection working
+-   ✅ Schema, credential, and verification infrastructure in place
+-   ✅ Embedded proof system working
+-   ✅ Proof verification logic working
+-   ❌ Frontend credential issuance/verification with wallet (SKIPPING for demo)
+-   🎯 **Gap:** Chrome extension not fully integrated with verification system
+
+**Demo Goal:** Create a "wow moment" that shows Halo protecting users from fake meeting links in real-time.
+
+## Key Demo "Wow Moment" Vision
+
+**The Story:**
+
+1. User receives suspicious meeting link via email/Discord
+2. Chrome extension automatically detects the link
+3. Shows ❌ "UNVERIFIED" red badge → Protection activated
+4. User sees a legitimate Halo-verified link
+5. Shows ✅ "VERIFIED" green badge with creator details
+6. Clear visual contrast demonstrates the protection value
+
+**Technical Flow:**
+
+1. Chrome extension scans pages for meeting links
+2. Extracts embedded proofs from verified links
+3. Validates proofs against AIR credential system
+4. Displays clear trust indicators
+5. Blocks/warns on unverified links
+
+**Timeline:** 16 hours hackathon MVP
+
+**Tech Stack:**
+
+-   @mocanetwork/air-credential-sdk (MANDATORY - Full verifiable credentials system)
+-   @mocanetwork/airkit-connector (AIR SDK connector for wagmi)
+-   wagmi + viem (wallet connection & Ethereum interactions)
+-   @tanstack/react-query (data fetching)
+-   Next.js + Tailwind (frontend for link generation)
+-   AIR Credentials Dashboard (schema & credential management)
+-   Chrome Extension Manifest V3 (link scanning & credential verification)
+
 ## Key Challenges and Analysis
 
 ### Technical Challenges:
@@ -128,66 +172,115 @@ halo/
 -   [x] **T3.3** Advanced popup features (45 min) ✅
 -   [x] **T3.4** Content script optimization (75 min) ✅
 
-### Phase 4:
+### Phase 4-DEMO: Chrome Extension Integration & Demo Polish (3 hours)
 
--   [ ] **T4.1-NEW** Create content scripts for meeting link detection (60 min)
--   [ ] **T4.2-NEW** Implement proof extraction and verification in extension (90 min) 🎯
--   [ ] **T4.3-NEW** Build trust badge injection system with verification results (75 min)
--   [ ] **T4.4-NEW** Add cross-platform support (Gmail, Discord) (45 min)
+#### **T4.1-DEMO: Chrome Extension Verification Integration (90 min)**
 
-### Phase 5: Integration & Testing (2 hours)
+-   Connect extension background script to working verification logic
+-   Integrate proof extraction with credential verification system
+-   Test end-to-end verification flow in extension
+-   **Success Criteria:** Extension correctly verifies embedded proofs and shows trust badges
 
--   [ ] **T5.1** End-to-end testing of complete flow (45 min)
--   [ ] **T5.2** Bug fixes and UX improvements (45 min)
--   [ ] **T5.3** Demo preparation and documentation (30 min)
+#### **T4.2-DEMO: Demo Content & Test Links (45 min)**
 
-## Project Status Board
+-   Create sample verified meeting links with embedded proofs
+-   Create sample unverified meeting links for contrast
+-   Set up test Gmail/Discord pages with both link types
+-   **Success Criteria:** Clear verified vs unverified examples ready for demo
 
-### Todo
+#### **T4.3-DEMO: Visual Polish & Demo Flow (45 min)**
 
--   [ ] 🎯 **PRIORITY:** T4.2-RESKIN Chrome Extension Integration (90 min)
--   [ ] 🔄 **NEXT:** T4.3-RESKIN Demo Polish & Testing (60 min)
--   [ ] 🔄 **FUTURE:** End-to-end testing and demo preparation (T5.1-T5.3)
--   [ ] ✅ Complete Halo MVP: Meeting Link Generation + Chrome Extension Verification
+-   Enhance trust badge visual design for maximum impact
+-   Create clear "VERIFIED ✅" vs "UNVERIFIED ❌" messaging
+-   Add hover details showing verification information
+-   **Success Criteria:** Professional, impactful visual indicators that create "wow" moment
 
-### In Progress
+### Phase 5-DEMO: Demo Preparation & Documentation (30 min)
 
--   🎯 **Next Task: T4.2-RESKIN** - Chrome Extension Integration (90 min)
--   Bridge frontendv2 verification with existing enterprise-grade Chrome extension
--   Create API endpoints and verification logic integration
+#### **T5.1-DEMO: Demo Script & Testing (30 min)**
 
-### Done
+-   Create step-by-step demo script
+-   Test complete demo flow multiple times
+-   Document any edge cases or manual steps needed
+-   **Success Criteria:** Reliable 2-3 minute demo that consistently works
 
--   [x] Project planning and structure design
--   [x] Next.js project setup with TypeScript + Tailwind CSS in frontend/ folder (T1.1)
--   [x] Install AIR SDK dependencies in frontend/ folder (T1.2)
--   [x] Setup wagmi providers and configuration in frontend/ folder (T1.3)
--   [x] Create basic wallet connection page and components (T1.4)
--   [x] Refactor to navigation header with global wallet state (T1.4b)
--   [x] Complete manual dashboard setup: schema, credential, verification program (T1.6-NEW)
--   [x] Install AIR Credentials SDK package (T1.5-NEW)
--   [x] Configure complete credentials SDK integration with issuance and verification (T1.7-NEW)
--   [x] ✅ **PHASE 1 COMPLETE:** Foundation + Credentials SDK Setup (8/8 tasks - 100%)
--   [x] Build credential issuance UI with 3-state interface (T2.1-NEW)
--   [x] Implement credential creation flow with AIR SDK widget integration (T2.2-NEW)
--   [x] Resolve environment variable API URL override issue (T2.2b-NEW)
--   [x] ✅ **BREAKTHROUGH:** AIR Credential Widget launches successfully
--   [x] ✅ **ARCHITECTURE PIVOT:** Corrected to proper VC model (Issue → Present → Verify)
--   [x] Complete verifiable presentations implementation with UI integration (T2.3-NEW)
--   [x] Build verification interface with navigation integration (T2.4-NEW)
--   [x] Update landing page with comprehensive VC education content (T2.5-NEW)
--   [x] ✅ **PHASE 2 COMPLETE:** Full VC web application with educational content ready
--   [x] ✅ **PHASE 3 COMPLETE:** Enterprise-grade Chrome extension with optimized content scripts ready
--   [x] ✅ **T4.1-RESKIN COMPLETE:** frontendv2 transformed into Halo meeting link verification app
+## Updated Project Status Board
+
+### Todo (Demo-Critical Path)
+
+-   [ ] 🎯 **T4.1-DEMO:** Chrome Extension Verification Integration (90 min) - PRIORITY
+-   [ ] 🎯 **T4.2-DEMO:** Demo Content & Test Links (45 min)
+-   [ ] 🎯 **T4.3-DEMO:** Visual Polish & Demo Flow (45 min)
+-   [ ] 📋 **T5.1-DEMO:** Demo Script & Testing (30 min)
+
+### Skipped for Demo
+
+-   ❌ Frontend credential issuance UI (not critical for demo impact)
+-   ❌ Complex verification flows (demo uses pre-made examples)
+-   ❌ Advanced extension features (focus on core protection demo)
+
+### Done (Demo Foundation)
+
+-   [x] ✅ Chrome extension foundation with enterprise features
+-   [x] ✅ AIR credential system setup and configuration
+-   [x] ✅ Embedded proof system working
+-   [x] ✅ Verification logic implemented
+-   [x] ✅ Professional web app interface
+-   [x] ✅ **PHASE 1 COMPLETE:** Foundation + Credentials SDK Setup (8/8 tasks)
+-   [x] ✅ **PHASE 2 COMPLETE:** Credential Issuance & Verifiable Presentations (5/5 tasks)
+-   [x] ✅ **PHASE 3 COMPLETE:** Chrome Extension Foundation (4/4 tasks)
 
 ## Current Status / Progress Tracking
 
-**Current Phase:** ✅ PHASE 4.1-RESKIN COMPLETE - frontendv2 Meeting Link Customization (100%)
-**Next Action:** T4.2-RESKIN Chrome Extension Integration (90 min)
-**Blockers:** None - Working AIR credentials foundation with meeting link context
-**Est. Completion:** T+29 hours from start
+**Current Phase:** 🎯 PHASE 4-DEMO - Chrome Extension Integration & Demo Polish
+**Next Action:** T4.1-DEMO Chrome Extension Verification Integration (90 min)
+**Demo Goal:** Create "wow moment" showing real-time meeting link protection
+**Est. Completion:** 3.5 hours to demo-ready state
 
-**🎉 MAJOR MILESTONE ACHIEVED:** T4.1-RESKIN Complete! Working meeting link verification app ready for Chrome integration!
+**🎯 DEMO STRATEGY:** Focus on impactful visual demonstration of Halo's protection value rather than complete feature implementation
+
+## Demo Success Criteria
+
+### **Primary Wow Moment:**
+
+Clear visual contrast between verified and unverified meeting links showing real protection value
+
+### **Technical Requirements:**
+
+1. **Extension Detection:** Automatically finds meeting links on real websites
+2. **Proof Verification:** Correctly validates embedded AIR credentials
+3. **Trust Badges:** Clear visual indicators (✅ VERIFIED vs ❌ UNVERIFIED)
+4. **Real-time Protection:** Immediate feedback when scanning pages
+
+### **Demo Platforms:**
+
+-   Gmail with test emails containing both verified and unverified links
+-   Discord with meeting links in chat messages
+-   Consistent behavior across platforms
+
+### **User Experience:**
+
+-   **Before Halo:** User can't tell if meeting link is legitimate
+-   **After Halo:** Instant visual feedback on link trustworthiness
+-   **Protection Value:** Clear prevention of social engineering attacks
+
+## Risk Assessment & Mitigation
+
+### **Technical Risks:**
+
+-   **Risk:** Chrome extension communication issues with verification system
+-   **Mitigation:** Focus on direct proof verification without complex API calls
+
+-   **Risk:** Proof extraction failing on demo links
+-   **Mitigation:** Create multiple test scenarios with various proof formats
+
+### **Demo Risks:**
+
+-   **Risk:** Extension not loading properly during demo
+-   **Mitigation:** Test loading process multiple times, have backup scenarios
+
+-   **Risk:** Verification taking too long for live demo
+-   **Mitigation:** Pre-cache common verification results, use local validation
 
 ### ✅ T4.1-RESKIN COMPLETED - Meeting Link Credential Customization
 
@@ -2723,6 +2816,19 @@ The user's observation about specific field order was the key to resolving this 
 **Files Modified**: `frontend/lib/credentialsUtils.ts`
 
 **Testing Required**: Please test the credential generation flow to confirm the demo now waits 5 seconds before auto-completing instead of 2 seconds.
+
+### ✅ Demo Notice Box Removed from Verify Page
+
+**Task Completed**: Removed the yellow demo notice box from the verify link page at `/verify`
+
+**Changes Made**:
+
+-   Removed the entire yellow "Demo Notice" section that displayed "This is a demo verification interface..."
+-   Cleaned up the layout without affecting other UI elements
+
+**Files Modified**: `frontend/app/verify/page.tsx`
+
+**Result**: The verify page now has a cleaner interface without the demo warning, focusing only on the core verification functionality and helpful information about what can be verified.
 
 ## Lessons
 
