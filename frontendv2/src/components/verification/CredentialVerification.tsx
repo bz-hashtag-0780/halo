@@ -73,6 +73,7 @@ const CredentialVerification = ({
 		useState<VerificationResults | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [userName, setUserName] = useState('');
+	const [email, setEmail] = useState('');
 	const [companyName, setCompanyName] = useState('');
 	const widgetRef = useRef<AirCredentialWidget | null>(null);
 
@@ -272,8 +273,32 @@ const CredentialVerification = ({
 
 					{!isVerified ? (
 						<>
+							{/* Halo Link Display - Show upfront */}
+							<div className="mb-6 p-4 bg-gray-700 rounded-lg border border-gray-600">
+								<p className="text-gray-300 text-sm mb-2 font-medium">
+									Halo Link:
+								</p>
+								<div className="text-[#00AEEF] font-mono text-sm break-all">
+									https://halo.link.vercel.app/orh-nsya-yce
+								</div>
+							</div>
+
 							{/* User Input Section */}
 							<div className="space-y-4 mb-6">
+								<div>
+									<label className="block text-sm font-medium text-gray-300 mb-2">
+										Your Email
+									</label>
+									<input
+										type="text"
+										value={email}
+										onChange={(e) =>
+											setEmail(e.target.value)
+										}
+										className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00AEEF] focus:border-transparent"
+										placeholder="Enter your email"
+									/>
+								</div>
 								<div>
 									<label className="block text-sm font-medium text-gray-300 mb-2">
 										Your Name
@@ -360,44 +385,102 @@ const CredentialVerification = ({
 							)}
 						</>
 					) : (
-						/* Success State */
-						<div className="text-center py-8">
-							<div
-								className="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-6 shadow-lg"
-								style={{
-									boxShadow:
-										'0 0 20px rgba(34, 197, 94, 0.4)',
-								}}
-							>
-								<svg
-									className="w-10 h-10 text-white"
-									fill="currentColor"
-									viewBox="0 0 20 20"
+						/* Success State - Detailed Meeting Information */
+						<div className="py-6">
+							<div className="text-center mb-6">
+								<div
+									className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4 shadow-lg"
+									style={{
+										boxShadow:
+											'0 0 20px rgba(34, 197, 94, 0.4)',
+									}}
 								>
-									<path
-										fillRule="evenodd"
-										d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-										clipRule="evenodd"
-									/>
-								</svg>
-							</div>
-							<h3 className="text-2xl font-bold text-white mb-2">
-								✅ Verified
-							</h3>
-							<p className="text-green-400 text-lg mb-6">
-								You are from Halo
-							</p>
-
-							{/* Link Display */}
-							<div className="mb-6 p-4 bg-gray-700 rounded-lg border border-gray-600">
-								<p className="text-gray-300 text-sm mb-2">
-									Your Halo Link:
+									<svg
+										className="w-8 h-8 text-white"
+										fill="currentColor"
+										viewBox="0 0 20 20"
+									>
+										<path
+											fillRule="evenodd"
+											d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+											clipRule="evenodd"
+										/>
+									</svg>
+								</div>
+								<h3 className="text-2xl font-bold text-white mb-2">
+									Verification Complete
+								</h3>
+								<p className="text-green-400 text-lg">
+									Meeting details verified
 								</p>
-								<div className="text-[#00AEEF] font-mono text-sm break-all">
-									https://halo.link.vercel.app/orh-nsya-yce
+							</div>
+
+							{/* Meeting Attendees */}
+							<div className="mb-6">
+								<h4 className="text-lg font-semibold text-white mb-4">
+									Meeting Attendees
+								</h4>
+
+								{/* Attendee 1 */}
+								<div className="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600">
+									<div className="flex items-start gap-3">
+										<div className="flex-shrink-0">
+											<span className="text-green-400 text-lg">
+												✅
+											</span>
+										</div>
+										<div className="flex-1">
+											<div className="flex items-center gap-2 mb-1">
+												<span className="text-white font-medium">
+													swt
+												</span>
+											</div>
+											<div className="text-gray-300 text-sm mb-1">
+												swt.anamilee@gmail.com
+											</div>
+											<div className="text-gray-400 text-sm">
+												Halo
+											</div>
+										</div>
+									</div>
+								</div>
+
+								{/* Attendee 2 */}
+								<div className="mb-6 p-4 bg-gray-700 rounded-lg border border-gray-600">
+									<div className="flex items-start gap-3">
+										<div className="flex-shrink-0">
+											<span className="text-green-400 text-lg">
+												✅
+											</span>
+										</div>
+										<div className="flex-1">
+											<div className="flex items-center gap-2 mb-1">
+												<span className="text-white font-medium">
+													bz
+												</span>
+											</div>
+											<div className="text-gray-300 text-sm mb-1">
+												bz@flowfoundation.org
+											</div>
+											<div className="text-gray-400 text-sm">
+												Flow Foundation
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
+							{/* Google Meeting Link */}
+							<div className="mb-6 p-4 bg-green-900/20 border border-green-600 rounded-lg">
+								<p className="text-green-300 text-sm font-medium mb-2">
+									Meeting Link:
+								</p>
+								<div className="text-green-400 font-mono text-sm break-all bg-green-900/30 p-2 rounded">
+									https://meet.google.com/dyg-rrci-eji
+								</div>
+							</div>
+
+							{/* Action Button */}
 							<button
 								onClick={handleCopyLink}
 								className="w-full bg-[#00AEEF] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#0099D4] focus:outline-none focus:ring-2 focus:ring-[#00AEEF] focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 shadow-lg"
@@ -406,7 +489,7 @@ const CredentialVerification = ({
 										'0 0 20px rgba(0, 174, 239, 0.3)',
 								}}
 							>
-								Copy Link
+								Copy Google Meeting Link
 							</button>
 						</div>
 					)}
