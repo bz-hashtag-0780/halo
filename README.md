@@ -2,7 +2,8 @@
 
 Team: bz & swt
 
-Halo prevents phishing, fake meeting links, and scam DMs by using onchain verifiable credentials to prove who you’re really interacting with. It’s a portable trust layer that protects you before you ever click a link or join a meeting.
+Prevent social engineering with verifiable credentials.
+Halo proves who you’re meeting before you ever join a google meeting.
 
 ---
 
@@ -16,33 +17,9 @@ Halo prevents phishing, fake meeting links, and scam DMs by using onchain verifi
 
 ## How it works
 
--   Users connect their wallet → see or request a trust credential.
--   Generates signed meeting links tied to onchain trust proofs.
--   Recipients (via Chrome extension) auto-verify and see a ✅ trust badge or ⚠️ warning before clicking.
-
----
-
-## Tech
-
--   AIR Account + Credential SDKs for wallet login & VCs
--   Next.js + Tailwind for the frontend
--   Chrome Extension to verify links and show trust badges
--   Optional ZK for minimal disclosure proofs
-
----
-
-## Key features
-
--   Signed links to stop phishing
--   Portable VC trust checks across Discord, Telegram, Email
--   Never reveals balances or private data — only proves trust
--   ZK-enabled for extra privacy
-
----
-
-## Quick demo
-
-1. User connects wallet
-2. Generates Google Meet link
-3. Creates a signed proof of link
-4. Recipient verifies link → sees “Verified”.
+-   Connect Wallet: User connects their wallet via the AIR Account SDK.
+-   Verify Credentials: User verify their credentials to create a Halo Link
+-   Share: Sends halo.link through email
+-   Recipient Verifies: Recipient’s Chrome extension detects the link and requires them to prove their own credentials.
+-   Link Unlocks: Only after both sides prove who they are does the actual meeting link (Google Meet) unlock.
+-   Trusted Meeting: Both parties meet knowing exactly who is on the other side.
