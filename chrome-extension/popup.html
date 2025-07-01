@@ -3,448 +3,132 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Halo - Enhanced Meeting Link Verifier</title>
+		<title>Halo - Meeting Link Verifier</title>
 		<link rel="stylesheet" href="popup.css" />
 	</head>
 	<body>
 		<div class="popup-container">
-			<!-- Enhanced Header -->
-			<div class="popup-header">
-				<div class="logo">
-					<span class="logo-icon">🛡️</span>
-					<span class="logo-text">Halo</span>
+			<!-- Logo Section -->
+			<div class="logo-section">
+				<div class="logo-icon">
+					<svg
+						width="32"
+						height="32"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+							clip-rule="evenodd"
+						/>
+					</svg>
 				</div>
-				<div class="header-info">
-					<div class="version">v1.1.0</div>
-					<div class="health-indicator" id="healthIndicator">
-						⚪ Unknown
-					</div>
-				</div>
+				<h1 class="logo-text">HALO</h1>
 			</div>
 
-			<!-- Main Status Bar -->
-			<div class="status-bar">
-				<div class="status-item">
-					<span class="status-icon" id="extensionStatus">🔴</span>
-					<span class="status-text">
-						<span class="status-label">Status:</span>
-						<span class="status-value" id="extensionStatusText"
-							>Loading...</span
+			<!-- Main Content -->
+			<div class="content-section">
+				<!-- Initial State -->
+				<div id="initialState">
+					<div class="status-message">
+						<span class="status-icon">🔗</span>
+						<span class="status-text">Halo Link Found</span>
+					</div>
+
+					<div class="link-container">
+						<div class="link-label">Halo Link:</div>
+						<div class="link-display">
+							https://halo.link.vercel.app/orh-nsya-yce
+						</div>
+					</div>
+
+					<!-- User Input Section -->
+					<div class="input-section">
+						<div class="input-group">
+							<label class="input-label">Your Name</label>
+							<input
+								type="text"
+								id="userName"
+								class="input-field"
+								placeholder="Enter your name"
+							/>
+						</div>
+						<div class="input-group">
+							<label class="input-label">Company</label>
+							<input
+								type="text"
+								id="companyName"
+								class="input-field"
+								placeholder="Enter your company"
+							/>
+						</div>
+					</div>
+
+					<button class="reveal-button" id="revealButton">
+						<span class="button-text">Verify Link</span>
+					</button>
+
+					<button class="create-button" id="createButton">
+						<span class="button-text">Create Halo Link</span>
+					</button>
+				</div>
+
+				<!-- Verified State -->
+				<div id="verifiedState" style="display: none">
+					<div class="status-message">
+						<span class="status-icon">✅</span>
+						<span class="status-text"
+							>Link Verified Successfully</span
 						>
-					</span>
-				</div>
-				<div class="master-toggle">
-					<label class="toggle-switch">
-						<input type="checkbox" id="enableToggle" />
-						<span class="toggle-slider"></span>
-					</label>
-				</div>
-			</div>
-
-			<!-- Tab Navigation -->
-			<div class="tab-navigation">
-				<button class="tab-button active" data-tab="dashboard">
-					<span class="tab-icon">📊</span>
-					<span class="tab-label">Dashboard</span>
-				</button>
-				<button class="tab-button" data-tab="settings">
-					<span class="tab-icon">⚙️</span>
-					<span class="tab-label">Settings</span>
-				</button>
-				<button class="tab-button" data-tab="advanced">
-					<span class="tab-icon">🔧</span>
-					<span class="tab-label">Advanced</span>
-				</button>
-			</div>
-
-			<!-- Tab Content -->
-			<div class="tab-content">
-				<!-- Dashboard Tab -->
-				<div class="tab-panel active" id="dashboard">
-					<!-- Current Tab Section -->
-					<div class="section current-tab-section">
-						<div class="section-header">
-							<h3>Current Tab</h3>
-							<div class="tab-security-badge">
-								<span class="tab-url" id="currentTabUrl"
-									>Loading...</span
-								>
-							</div>
-						</div>
-						<div class="tab-actions">
-							<button
-								class="action-button primary"
-								id="scanButton"
-							>
-								<span class="button-icon">🔍</span>
-								Quick Scan
-							</button>
-							<button
-								class="action-button secondary"
-								id="batchScanButton"
-							>
-								<span class="button-icon">📊</span>
-								Batch Scan
-							</button>
-						</div>
-						<div
-							class="scan-results"
-							id="scanResults"
-							style="display: none"
-						>
-							<div class="results-header">Scan Results:</div>
-							<div
-								class="results-content"
-								id="resultsContent"
-							></div>
-						</div>
 					</div>
 
-					<!-- Statistics Section -->
-					<div class="section stats-section">
-						<div class="section-header">
-							<h3>Statistics</h3>
-							<button
-								class="icon-button"
-								id="exportStatsButton"
-								title="Export Statistics"
-							>
-								<span>📤</span>
-							</button>
-						</div>
+					<!-- Meeting Details -->
+					<div class="meeting-details">
+						<h3 class="meeting-title">Meeting Attendees</h3>
 
-						<!-- Primary Stats -->
-						<div class="stats-grid primary-stats">
-							<div class="stat-item">
-								<div class="stat-number" id="linksScanned">
-									-
+						<div class="attendee-list">
+							<div class="attendee-item">
+								<div class="attendee-info">
+									<div class="attendee-name">
+										<span class="verified-icon">✅</span>
+										<span class="name">swt</span>
+									</div>
+									<div class="attendee-email">
+										swt.anamilee@gmail.com
+									</div>
+									<div class="attendee-company">Halo</div>
 								</div>
-								<div class="stat-label">Scanned</div>
 							</div>
-							<div class="stat-item verified">
-								<div class="stat-number" id="linksVerified">
-									-
+
+							<div class="attendee-item">
+								<div class="attendee-info">
+									<div class="attendee-name">
+										<span class="verified-icon">✅</span>
+										<span class="name">bz</span>
+									</div>
+									<div class="attendee-email">
+										bz@flowfoundation.org
+									</div>
+									<div class="attendee-company">
+										Flow Foundation
+									</div>
 								</div>
-								<div class="stat-label">Verified</div>
-							</div>
-							<div class="stat-item threats">
-								<div class="stat-number" id="threatsBlocked">
-									-
-								</div>
-								<div class="stat-label">Blocked</div>
-							</div>
-							<div class="stat-item success-rate">
-								<div class="stat-number" id="successRate">
-									-%
-								</div>
-								<div class="stat-label">Success Rate</div>
 							</div>
 						</div>
 
-						<!-- Enhanced Stats -->
-						<div class="stats-grid enhanced-stats">
-							<div class="stat-item cache">
-								<div class="stat-number" id="cacheHits">-</div>
-								<div class="stat-label">Cache Hits</div>
-							</div>
-							<div class="stat-item api">
-								<div class="stat-number" id="apiCalls">-</div>
-								<div class="stat-label">API Calls</div>
-							</div>
-							<div class="stat-item failures">
-								<div
-									class="stat-number"
-									id="failedVerifications"
-								>
-									-
-								</div>
-								<div class="stat-label">Failed</div>
+						<!-- Google Meet Link -->
+						<div class="meeting-link-container">
+							<div class="meeting-link-label">Meeting Link:</div>
+							<div class="meeting-link">
+								https://meet.google.com/cjd-zjiw-unz
 							</div>
 						</div>
 					</div>
 
-					<!-- Health Status Section -->
-					<div class="section health-section">
-						<div class="section-header">
-							<h3>System Health</h3>
-							<div
-								class="health-status"
-								id="healthIndicatorDetailed"
-							>
-								🔄 Checking...
-							</div>
-						</div>
-						<div class="health-details" id="healthDetails">
-							<div class="health-services">
-								<div class="service-status">
-									🔄 Initializing health check...
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Quick Actions -->
-					<div class="section actions-section">
-						<div class="section-header">
-							<h3>Quick Actions</h3>
-						</div>
-						<div class="action-grid">
-							<button
-								class="action-button primary"
-								id="generateButton"
-							>
-								<span class="button-icon">🎫</span>
-								Generate Link
-							</button>
-							<button
-								class="action-button secondary"
-								id="verifyButton"
-							>
-								<span class="button-icon">🔍</span>
-								Verify Link
-							</button>
-						</div>
-					</div>
-				</div>
-
-				<!-- Settings Tab -->
-				<div class="tab-panel" id="settings">
-					<!-- Basic Settings -->
-					<div class="section settings-basic">
-						<div class="section-header">
-							<h3>Basic Settings</h3>
-						</div>
-						<div class="settings-list">
-							<div class="setting-item">
-								<div class="setting-info">
-									<span class="setting-label"
-										>Auto-scan pages</span
-									>
-									<span class="setting-description"
-										>Automatically scan pages for meeting
-										links</span
-									>
-								</div>
-								<label class="setting-toggle">
-									<input
-										type="checkbox"
-										id="autoScanToggle"
-									/>
-									<span class="setting-slider"></span>
-								</label>
-							</div>
-							<div class="setting-item">
-								<div class="setting-info">
-									<span class="setting-label"
-										>Show trust badges</span
-									>
-									<span class="setting-description"
-										>Display verification badges next to
-										links</span
-									>
-								</div>
-								<label class="setting-toggle">
-									<input
-										type="checkbox"
-										id="showBadgesToggle"
-									/>
-									<span class="setting-slider"></span>
-								</label>
-							</div>
-							<div class="setting-item demo-mode">
-								<div class="setting-info">
-									<span class="setting-label"
-										>🎬 Demo Mode</span
-									>
-									<span class="setting-description"
-										>Automatically show verification badges
-										on meeting links for demonstration</span
-									>
-								</div>
-								<label class="setting-toggle">
-									<input
-										type="checkbox"
-										id="demoModeToggle"
-									/>
-									<span class="setting-slider"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-
-					<!-- Performance Settings -->
-					<div class="section settings-performance">
-						<div class="section-header">
-							<h3>Performance</h3>
-						</div>
-						<div class="settings-list">
-							<div class="setting-item">
-								<div class="setting-info">
-									<span class="setting-label"
-										>Enable caching</span
-									>
-									<span class="setting-description"
-										>Cache verification results for faster
-										performance</span
-									>
-								</div>
-								<label class="setting-toggle">
-									<input type="checkbox" id="cacheToggle" />
-									<span class="setting-slider"></span>
-								</label>
-							</div>
-							<div class="setting-item">
-								<div class="setting-info">
-									<span class="setting-label"
-										>Rate limiting</span
-									>
-									<span class="setting-description"
-										>Limit API requests to prevent
-										abuse</span
-									>
-								</div>
-								<label class="setting-toggle">
-									<input
-										type="checkbox"
-										id="rateLimitToggle"
-									/>
-									<span class="setting-slider"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-
-					<!-- Cache Management -->
-					<div class="section cache-management">
-						<div class="section-header">
-							<h3>Cache Management</h3>
-						</div>
-						<div class="cache-info" id="cacheStats">
-							<div class="cache-stat">
-								<span class="cache-label"
-									>Loading cache information...</span
-								>
-							</div>
-						</div>
-						<div class="cache-actions">
-							<button
-								class="action-button warning"
-								id="clearCacheButton"
-							>
-								<span class="button-icon">🗑️</span>
-								Clear Cache
-							</button>
-						</div>
-					</div>
-				</div>
-
-				<!-- Advanced Tab -->
-				<div class="tab-panel" id="advanced">
-					<!-- Debug Settings -->
-					<div class="section debug-settings">
-						<div class="section-header">
-							<h3>Debug & Diagnostics</h3>
-						</div>
-						<div class="settings-list">
-							<div class="setting-item">
-								<div class="setting-info">
-									<span class="setting-label"
-										>Debug logging</span
-									>
-									<span class="setting-description"
-										>Enable detailed console logging</span
-									>
-								</div>
-								<label class="setting-toggle">
-									<input type="checkbox" id="debugToggle" />
-									<span class="setting-slider"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-
-					<!-- Batch Operations -->
-					<div class="section batch-operations">
-						<div class="section-header">
-							<h3>Batch Operations</h3>
-						</div>
-						<div class="batch-info">
-							<p class="batch-description">
-								Process multiple links simultaneously for better
-								efficiency.
-							</p>
-						</div>
-						<div class="batch-controls">
-							<button
-								class="action-button primary"
-								id="batchVerifyButton"
-							>
-								<span class="button-icon">⚡</span>
-								Batch Verify Page
-							</button>
-						</div>
-					</div>
-
-					<!-- Data Export -->
-					<div class="section data-export">
-						<div class="section-header">
-							<h3>Data Export</h3>
-						</div>
-						<div class="export-info">
-							<p class="export-description">
-								Export your statistics and settings for analysis
-								or backup.
-							</p>
-						</div>
-						<div class="export-controls">
-							<button
-								class="action-button secondary"
-								id="exportDataButton"
-							>
-								<span class="button-icon">📊</span>
-								Export Data
-							</button>
-						</div>
-					</div>
-
-					<!-- System Information -->
-					<div class="section system-info">
-						<div class="section-header">
-							<h3>System Information</h3>
-						</div>
-						<div class="info-grid">
-							<div class="info-item">
-								<span class="info-label"
-									>Extension Version:</span
-								>
-								<span class="info-value">v1.1.0</span>
-							</div>
-							<div class="info-item">
-								<span class="info-label"
-									>Manifest Version:</span
-								>
-								<span class="info-value">V3</span>
-							</div>
-							<div class="info-item">
-								<span class="info-label">Platform:</span>
-								<span class="info-value">Chrome Extension</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Footer -->
-			<div class="popup-footer">
-				<div class="footer-links">
-					<a href="#" id="helpLink">Help</a>
-					<a href="#" id="aboutLink">About</a>
-					<a href="#" id="keyboardShortcuts">Shortcuts</a>
-				</div>
-				<div class="footer-text">
-					<span>Powered by AIR Credentials</span>
-					<span class="footer-separator">•</span>
-					<span>Moca Testnet</span>
+					<button class="create-button" id="createButtonVerified">
+						<span class="button-text">Create Another Link</span>
+					</button>
 				</div>
 			</div>
 		</div>
